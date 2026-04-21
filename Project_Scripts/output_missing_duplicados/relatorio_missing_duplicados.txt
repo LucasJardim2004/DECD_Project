@@ -1,0 +1,109 @@
+==============================================================================================================
+ANALISE DE DADOS EM FALTA E DUPLICADOS - CVD_CLEANED
+==============================================================================================================
+
+1) VISAO GERAL
+--------------------------------------------------------------------------------------------------------------
+Rows: 308854
+Columns: 19
+Total missing (real): 0
+Exact duplicate rows: 80
+
+2) MISSING VALUES REAIS POR COLUNA
+--------------------------------------------------------------------------------------------------------------
+                      column  missing_count  missing_pct   dtype  unique_non_null
+                Age_Category              0          0.0     str               13
+         Alcohol_Consumption              0          0.0 float64               31
+                   Arthritis              0          0.0     str                2
+                         BMI              0          0.0 float64             3654
+                     Checkup              0          0.0     str                5
+                  Depression              0          0.0     str                2
+                    Diabetes              0          0.0     str                4
+                    Exercise              0          0.0     str                2
+     FriedPotato_Consumption              0          0.0 float64               69
+           Fruit_Consumption              0          0.0 float64               77
+              General_Health              0          0.0     str                5
+Green_Vegetables_Consumption              0          0.0 float64               75
+               Heart_Disease              0          0.0     str                2
+                 Height_(cm)              0          0.0 float64               99
+                Other_Cancer              0          0.0     str                2
+                         Sex              0          0.0     str                2
+                 Skin_Cancer              0          0.0     str                2
+             Smoking_History              0          0.0     str                2
+                 Weight_(kg)              0          0.0 float64              525
+
+3) MISSING VALUES DISFARCADOS (COLUNAS NAO NUMERICAS)
+--------------------------------------------------------------------------------------------------------------
+         column  disguised_missing_count  disguised_missing_pct examples
+   Age_Category                        0                    0.0         
+      Arthritis                        0                    0.0         
+        Checkup                        0                    0.0         
+     Depression                        0                    0.0         
+       Diabetes                        0                    0.0         
+       Exercise                        0                    0.0         
+ General_Health                        0                    0.0         
+  Heart_Disease                        0                    0.0         
+   Other_Cancer                        0                    0.0         
+            Sex                        0                    0.0         
+    Skin_Cancer                        0                    0.0         
+Smoking_History                        0                    0.0         
+
+4) TOP 20 LINHAS COM MAIS CAMPOS EM FALTA
+--------------------------------------------------------------------------------------------------------------
+ row_index  real_missing  disguised_missing  total_missing
+         0             0                  0              0
+         1             0                  0              0
+         2             0                  0              0
+         3             0                  0              0
+         4             0                  0              0
+         5             0                  0              0
+         6             0                  0              0
+         7             0                  0              0
+         8             0                  0              0
+         9             0                  0              0
+        10             0                  0              0
+        11             0                  0              0
+        12             0                  0              0
+        13             0                  0              0
+        14             0                  0              0
+        15             0                  0              0
+        16             0                  0              0
+        17             0                  0              0
+        18             0                  0              0
+        19             0                  0              0
+
+5) DUPLICADOS EXATOS - RESUMO
+--------------------------------------------------------------------------------------------------------------
+ duplicated_rows  duplicated_rows_pct  duplicate_groups  largest_group
+             159               0.0515                79              3
+
+6) TOP 20 TAMANHOS DE GRUPOS DUPLICADOS
+--------------------------------------------------------------------------------------------------------------
+General_Health                 Checkup Exercise Heart_Disease Skin_Cancer Other_Cancer Depression Diabetes Arthritis    Sex Age_Category  Height_(cm)  Weight_(kg)   BMI Smoking_History  Alcohol_Consumption  Fruit_Consumption  Green_Vegetables_Consumption  FriedPotato_Consumption  group_size
+     Very Good    Within the past year      Yes            No          No           No         No       No        No Female        55-59        168.0        74.84 26.63              No                  0.0               30.0                          30.0                      4.0           3
+     Very Good    Within the past year      Yes            No          No           No         No       No        No   Male        65-69        183.0        83.91 25.09              No                  0.0                8.0                           4.0                      4.0           2
+     Very Good    Within the past year      Yes            No          No           No         No       No       Yes Female        75-79        160.0        81.65 31.89              No                  0.0               30.0                          16.0                      0.0           2
+     Very Good    Within the past year      Yes            No          No           No         No       No        No Female        50-54        163.0        72.57 27.46              No                  0.0               30.0                          30.0                      4.0           2
+     Excellent    Within the past year      Yes            No          No           No         No       No        No Female        18-24        165.0        54.43 19.97              No                  0.0               30.0                          12.0                      4.0           2
+     Very Good    Within the past year      Yes            No         Yes          Yes         No       No       Yes   Male        75-79        183.0        99.79 29.84              No                  0.0               16.0                          12.0                      8.0           2
+     Excellent    Within the past year      Yes            No          No           No         No       No        No   Male        30-34        183.0        81.65 24.41              No                  0.0               30.0                          30.0                     12.0           2
+     Excellent    Within the past year      Yes            No          No           No         No       No        No Female          80+        163.0        68.04 25.75              No                  0.0               30.0                          30.0                      0.0           2
+     Very Good    Within the past year      Yes            No          No           No         No       No        No   Male        55-59        183.0        90.72 27.12              No                  0.0               30.0                          30.0                      4.0           2
+          Good    Within the past year      Yes            No          No           No        Yes       No        No Female        18-24        163.0        81.65 30.90              No                  0.0               60.0                           4.0                      4.0           2
+          Fair    Within the past year      Yes            No          No           No         No      Yes       Yes Female        40-44        160.0        95.25 37.20              No                  0.0               30.0                          30.0                      4.0           2
+     Excellent    Within the past year      Yes            No          No           No         No       No        No Female        65-69        163.0        61.23 23.17             Yes                  0.0               30.0                          16.0                      0.0           2
+     Excellent    Within the past year      Yes            No          No           No         No       No        No   Male        45-49        180.0        72.57 22.32              No                  0.0               60.0                          30.0                      8.0           2
+     Excellent    Within the past year      Yes            No          No           No         No       No       Yes   Male        55-59        178.0        81.65 25.83             Yes                  0.0               30.0                          30.0                      4.0           2
+     Excellent    Within the past year      Yes            No          No           No         No       No        No Female        60-64        165.0        68.04 24.96              No                  3.0               30.0                          12.0                      4.0           2
+     Very Good    Within the past year      Yes            No          No           No         No       No        No Female        35-39        160.0        72.57 28.34             Yes                  0.0               60.0                          30.0                      4.0           2
+          Good Within the past 2 years      Yes            No          No           No         No       No        No   Male        30-34        183.0        90.72 27.12             Yes                  0.0               30.0                           8.0                      8.0           2
+     Excellent    Within the past year      Yes            No          No           No         No       No        No   Male        35-39        180.0        77.11 23.71              No                  0.0               30.0                          30.0                      4.0           2
+     Very Good    Within the past year      Yes            No          No           No         No       No        No   Male        45-49        173.0       115.67 38.77              No                  1.0               60.0                          30.0                      4.0           2
+     Very Good    Within the past year      Yes            No          No           No         No       No        No Female        35-39        165.0        65.77 24.13              No                  0.0               30.0                          12.0                     12.0           2
+
+7) DUPLICADOS POR SUBCONJUNTOS DE COLUNAS
+--------------------------------------------------------------------------------------------------------------
+                                                               subset_columns  duplicated_rows  duplicated_rows_pct
+General_Health, Checkup, Exercise, Heart_Disease, Diabetes, Age_Category, Sex           307731              99.6364
+                                                       Sex, Age_Category, BMI           296635              96.0438
+                             Sex, Age_Category, Height_(cm), Weight_(kg), BMI           289036              93.5834

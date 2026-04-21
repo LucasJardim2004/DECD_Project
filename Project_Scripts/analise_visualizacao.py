@@ -1,345 +1,200 @@
 """
-Análise de Visualização - CVD_cleaned.csv
+Analise de Visualizacao - CVD_cleaned.csv
 
-Script de análise completa de dados usando todas as técnicas de visualização
-de pandas, matplotlib e seaborn conforme apresentado no ficheiro 04-visualization.ipynb
+Gera apenas os graficos pedidos pela classificacao das variaveis:
+- categorica ordinal: histogramas
+- numerica continua: histogramas
+- binaria: circular
+
+A variavel diabetes fica numa secao separada porque a classificacao foi
+indicada como nao determinada.
 """
+
+from pathlib import Path
+import re
+import warnings
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-import warnings
-warnings.filterwarnings('ignore')
 
-# Configurar o estilo do seaborn
+warnings.filterwarnings("ignore")
+
 sns.set_theme()
-plt.rcParams['figure.figsize'] = (12, 6)
+plt.rcParams.update(
+    {
+        "figure.figsize": (10, 6),
+        "font.size": 16,
+        "axes.titlesize": 20,
+        "axes.labelsize": 17,
+        "xtick.labelsize": 14,
+        "ytick.labelsize": 14,
+        "legend.fontsize": 14,
+        "figure.titlesize": 22,
+    }
+)
+
+BASE_DIR = Path(__file__).resolve().parent
+OUTPUT_DIR = BASE_DIR / "output"
+ORDINAL_DIR = OUTPUT_DIR / "categoricas_ordinais"
+CONTINUA_DIR = OUTPUT_DIR / "numericas_continuas"
+BINARIA_DIR = OUTPUT_DIR / "binarias"
+INDETERMINADA_DIR = OUTPUT_DIR / "indeterminadas"
+
+for directory in [OUTPUT_DIR, ORDINAL_DIR, CONTINUA_DIR, BINARIA_DIR, INDETERMINADA_DIR]:
+    directory.mkdir(parents=True, exist_ok=True)
 
 
-# ============================================================================
-# 1. CARREGAR E EXPLORAR OS DADOS
-# ============================================================================
-
-print("=" * 80)
-print("1. CARREGANDO E EXPLORANDO OS DADOS")
-print("=" * 80)
-
-# Carregar o dataset
-df = pd.read_csv('./CVD_cleaned.csv')
-
-# Informações básicas do dataset
-print(f"\nForma do dataset: {df.shape}")
-print("\nPrimeiras linhas:")
-print(df.head())
-
-print("\nTipos de dados:")
-print(df.dtypes)
-
-print("\nValores em falta:")
-print(df.isnull().sum())
-
-print("\nEstatísticas básicas:")
-print(df.describe())
-
-# Identificar colunas numéricas e categóricas
-numerical_cols = df.select_dtypes(include=[np.number]).columns.tolist()
-categorical_cols = df.select_dtypes(include=['object']).columns.tolist()
-
-print(f"\nColunas numéricas: {numerical_cols}")
-print(f"\nColunas categóricas: {categorical_cols}")
+def safe_name(name: str) -> str:
+    cleaned = re.sub(r"[^\w\-]+", "_", str(name).strip().lower())
+    return cleaned.strip("_") or "sem_nome"
 
 
-# ============================================================================
-# 2. ANÁLISE UNIVARIADA - VARIÁVEIS NUMÉRICAS
-# ============================================================================
-
-print("\n" + "=" * 80)
-print("2. ANÁLISE UNIVARIADA - VARIÁVEIS NUMÉRICAS")
-print("=" * 80)
-
-# 2.1 Histogramas (usando pandas plot)
-print("\n2.1 - Gerando Histogramas...")
-fig, axes = plt.subplots(2, 3, figsize=(15, 10))
-axes = axes.ravel()
-
-for idx, col in enumerate(numerical_cols[:6]):
-    df[col].plot(kind='hist', ax=axes[idx], title=f'Histograma - {col}', bins=30)
-    axes[idx].set_ylabel('Frequência')
-
-plt.tight_layout()
-plt.savefig('histogramas.png', dpi=100, bbox_inches='tight')
-plt.show()
-
-# 2.2 Box Plots (Diagramas de Caixa)
-print("2.2 - Gerando Box Plots...")
-fig, axes = plt.subplots(2, 3, figsize=(15, 10))
-axes = axes.ravel()
-
-for idx, col in enumerate(numerical_cols[:6]):
-    df[col].plot(kind='box', ax=axes[idx], title=f'Box Plot - {col}')
-
-plt.tight_layout()
-plt.savefig('box_plots.png', dpi=100, bbox_inches='tight')
-plt.show()
-
-# 2.3 Histogramas com KDE (Seaborn)
-print("2.3 - Gerando Histogramas com KDE...")
-fig, axes = plt.subplots(2, 3, figsize=(15, 10))
-axes = axes.ravel()
-
-for idx, col in enumerate(numerical_cols[:6]):
-    sns.histplot(data=df, x=col, kde=True, ax=axes[idx])
-    axes[idx].set_title(f'Histograma com KDE - {col}')
-
-plt.tight_layout()
-plt.savefig('histogramas_kde.png', dpi=100, bbox_inches='tight')
-plt.show()
+ORDINAL_ORDER = {
+    "General_Health": ["Poor", "Fair", "Good", "Very Good", "Excellent"],
+    "Checkup": [
+        "Never",
+        "5 or more years ago",
+        "Within the past 5 years",
+        "Within the past 2 years",
+        "Within the past year",
+    ],
+    "Age_Category": [
+        "18-24",
+        "25-29",
+        "30-34",
+        "35-39",
+        "40-44",
+        "45-49",
+        "50-54",
+        "55-59",
+        "60-64",
+        "65-69",
+        "70-74",
+        "75-79",
+        "80+",
+    ],
+}
 
 
-# ============================================================================
-# 3. ANÁLISE UNIVARIADA - VARIÁVEIS CATEGÓRICAS
-# ============================================================================
+def save_histogram(df: pd.DataFrame, column: str, base_dir: Path, order: list[str] | None = None) -> None:
+    col_dir = base_dir / safe_name(column)
+    col_dir.mkdir(parents=True, exist_ok=True)
 
-print("\n" + "=" * 80)
-print("3. ANÁLISE UNIVARIADA - VARIÁVEIS CATEGÓRICAS")
-print("=" * 80)
+    plt.figure(figsize=(10, 6))
+    values = df[column].dropna()
 
-# 3.1 Gráficos de Barras
-print("\n3.1 - Gerando Gráficos de Barras...")
-fig, axes = plt.subplots(2, 3, figsize=(15, 10))
-axes = axes.ravel()
+    if order is not None:
+        categorical = pd.Categorical(values, categories=order, ordered=True)
+        codes = pd.Series(categorical.codes)
+        codes = codes[codes >= 0]
+        plt.hist(codes, bins=np.arange(-0.5, len(order) + 0.5, 1), edgecolor="black")
+        plt.xticks(range(len(order)), order, rotation=45, ha="right")
+    else:
+        numeric_values = pd.to_numeric(values, errors="coerce").dropna()
+        plt.hist(numeric_values, bins=20, edgecolor="black")
 
-for idx, col in enumerate(categorical_cols[:6]):
-    df[col].value_counts().plot(kind='bar', ax=axes[idx], title=f'Contagem - {col}')
-    axes[idx].set_ylabel('Frequência')
-    axes[idx].set_xlabel(col)
-    plt.setp(axes[idx].xaxis.get_majorticklabels(), rotation=45, ha='right')
-
-plt.tight_layout()
-plt.savefig('graficos_barras.png', dpi=100, bbox_inches='tight')
-plt.show()
-
-# 3.2 Gráficos de Pizza
-print("3.2 - Gerando Gráficos de Pizza...")
-fig, axes = plt.subplots(1, 3, figsize=(15, 5))
-
-# Selecionar 3 variáveis categóricas principais
-main_cats = categorical_cols[:3]
-
-for idx, col in enumerate(main_cats):
-    df[col].value_counts().plot(kind='pie', ax=axes[idx], title=f'Proporção - {col}', autopct='%1.1f%%')
-    axes[idx].set_ylabel('')
-
-plt.tight_layout()
-plt.savefig('graficos_pizza.png', dpi=100, bbox_inches='tight')
-plt.show()
-
-# 3.3 Count Plots (Seaborn)
-print("3.3 - Gerando Count Plots...")
-fig, axes = plt.subplots(1, 3, figsize=(15, 5))
-
-for idx, col in enumerate(main_cats):
-    sns.countplot(data=df, x=col, ax=axes[idx])
-    axes[idx].set_title(f'Contagem - {col}')
-    plt.setp(axes[idx].xaxis.get_majorticklabels(), rotation=45, ha='right')
-
-plt.tight_layout()
-plt.savefig('count_plots.png', dpi=100, bbox_inches='tight')
-plt.show()
-
-
-# ============================================================================
-# 4. ANÁLISE BIVARIADA - RELACIONAMENTOS ENTRE VARIÁVEIS
-# ============================================================================
-
-print("\n" + "=" * 80)
-print("4. ANÁLISE BIVARIADA - RELACIONAMENTOS ENTRE VARIÁVEIS")
-print("=" * 80)
-
-# 4.1 Scatter Plots
-print("\n4.1 - Gerando Scatter Plots...")
-if len(numerical_cols) >= 2:
-    fig, axes = plt.subplots(2, 2, figsize=(15, 10))
-    axes = axes.ravel()
-    
-    # Criar scatter plots entre diferentes pares
-    pairs = [(0, 1), (0, 2), (1, 2), (2, 3)] if len(numerical_cols) >= 4 else [(0, 1)]
-    
-    for idx, (i, j) in enumerate(pairs[:4]):
-        if i < len(numerical_cols) and j < len(numerical_cols):
-            df.plot(kind='scatter', x=numerical_cols[i], y=numerical_cols[j], 
-                   ax=axes[idx], alpha=0.5)
-            axes[idx].set_title(f'{numerical_cols[i]} vs {numerical_cols[j]}')
-    
+    plt.title(f"Histograma - {column}", fontsize=20)
+    plt.xlabel(column, fontsize=17)
+    plt.ylabel("Frequencia", fontsize=17)
+    plt.xticks(fontsize=14)
+    plt.yticks(fontsize=14)
     plt.tight_layout()
-    plt.savefig('scatter_plots.png', dpi=100, bbox_inches='tight')
-    plt.show()
-
-# 4.2 Joint Plots (Distância Conjunta + Marginais)
-print("4.2 - Gerando Joint Plots...")
-if len(numerical_cols) >= 2:
-    # Scatter com marginal (Hex)
-    sns.jointplot(data=df, x=numerical_cols[0], y=numerical_cols[1], kind='hex')
-    plt.suptitle(f'{numerical_cols[0]} vs {numerical_cols[1]} (Hex)', y=1.00)
-    plt.savefig('jointplot_hex.png', dpi=100, bbox_inches='tight')
-    plt.show()
-    
-    # Regressão linear
-    sns.jointplot(data=df, x=numerical_cols[0], y=numerical_cols[1], kind='reg')
-    plt.suptitle(f'{numerical_cols[0]} vs {numerical_cols[1]} (Regressão)', y=1.00)
-    plt.savefig('jointplot_reg.png', dpi=100, bbox_inches='tight')
-    plt.show()
-
-# 4.3 Categorical Plots
-print("4.3 - Gerando Categorical Plots...")
-if len(numerical_cols) >= 1 and len(categorical_cols) >= 1:
-    with sns.axes_style('ticks'):
-        g = sns.catplot(data=df, x=categorical_cols[0], y=numerical_cols[0], 
-                       kind='box', height=6, aspect=2)
-        g.set_axis_labels(categorical_cols[0], numerical_cols[0])
-        plt.savefig('catplot_box.png', dpi=100, bbox_inches='tight')
-        plt.show()
-        
-    # Count plot por categoria
-    with sns.axes_style('white'):
-        g = sns.catplot(data=df, x=categorical_cols[0], kind='count', 
-                       height=5, aspect=2, color='steelblue')
-        g.set_ylabels('Contagem')
-        plt.savefig('catplot_count.png', dpi=100, bbox_inches='tight')
-        plt.show()
+    plt.savefig(col_dir / "histograma.png", dpi=100, bbox_inches="tight")
+    plt.close()
 
 
-# ============================================================================
-# 5. ANÁLISE MULTIVARIADA - INTERAÇÕES ENTRE MÚLTIPLAS VARIÁVEIS
-# ============================================================================
+def save_pie_chart(df: pd.DataFrame, column: str, base_dir: Path) -> None:
+    col_dir = base_dir / safe_name(column)
+    col_dir.mkdir(parents=True, exist_ok=True)
 
-print("\n" + "=" * 80)
-print("5. ANÁLISE MULTIVARIADA - INTERAÇÕES ENTRE MÚLTIPLAS VARIÁVEIS")
-print("=" * 80)
+    counts = df[column].fillna("Missing").value_counts(dropna=False)
 
-# 5.1 Pair Plot (Matriz de Scatter Plot)
-print("\n5.1 - Gerando Pair Plot...")
-if len(numerical_cols) >= 2:
-    # Selecionar apenas as primeiras 4 variáveis numéricas para melhor visualização
-    subset_cols = numerical_cols[:4]
-    g = sns.pairplot(df[subset_cols], diag_kind='hist', plot_kws={'alpha': 0.6})
-    g.fig.suptitle('Pair Plot - Variáveis Numéricas', y=1.00)
-    plt.savefig('pairplot.png', dpi=100, bbox_inches='tight')
-    plt.show()
-
-# 5.2 FacetGrid - Histogramas Segmentados
-print("5.2 - Gerando FacetGrid...")
-if len(numerical_cols) >= 1 and len(categorical_cols) >= 1:
-    try:
-        g = sns.FacetGrid(df, col=categorical_cols[0], col_wrap=3, height=4)
-        g.map(sns.histplot, numerical_cols[0], bins=20)
-        g.fig.suptitle(f'Distribuição de {numerical_cols[0]} por {categorical_cols[0]}', 
-                       y=1.00)
-        plt.savefig('facetgrid.png', dpi=100, bbox_inches='tight')
-        plt.show()
-    except Exception as e:
-        print(f"Não foi possível criar o FacetGrid: {e}")
-
-
-# ============================================================================
-# 6. ANÁLISE DE CORRELAÇÃO E HEATMAPS
-# ============================================================================
-
-print("\n" + "=" * 80)
-print("6. ANÁLISE DE CORRELAÇÃO E HEATMAPS")
-print("=" * 80)
-
-# 6.1 Calcular correlação
-print("\n6.1 - Calculando Matriz de Correlação...")
-correlation_matrix = df[numerical_cols].corr()
-print("\nMatriz de Correlação:")
-print(correlation_matrix)
-
-# 6.2 Heatmap de Correlação
-print("\n6.2 - Gerando Heatmap de Correlação...")
-plt.figure(figsize=(12, 10))
-sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', center=0, 
-            fmt='.2f', square=True, linewidths=1, cbar_kws={"shrink": 0.8})
-plt.title('Matriz de Correlação - Variáveis Numéricas', fontsize=14, pad=20)
-plt.tight_layout()
-plt.savefig('heatmap_correlacao.png', dpi=100, bbox_inches='tight')
-plt.show()
-
-# 6.3 KDE Plots Bi-dimensionais
-print("6.3 - Gerando KDE Plots Bi-dimensionais...")
-if len(numerical_cols) >= 2:
-    fig, axes = plt.subplots(1, 2, figsize=(15, 6))
-    
-    # KDE plot 2D com fill
-    sns.kdeplot(data=df, x=numerical_cols[0], y=numerical_cols[1], 
-               fill=True, ax=axes[0])
-    axes[0].set_title(f'KDE 2D - {numerical_cols[0]} vs {numerical_cols[1]}')
-    
-    # Histplot 2D
-    sns.histplot(data=df, x=numerical_cols[0], y=numerical_cols[1], 
-                ax=axes[1], bins=20)
-    axes[1].set_title(f'Histograma 2D - {numerical_cols[0]} vs {numerical_cols[1]}')
-    
+    plt.figure(figsize=(8, 8))
+    ax = counts.plot(kind="pie", autopct="%1.1f%%", textprops={"fontsize": 20})
+    for text in ax.texts:
+        text.set_fontsize(25)
+    plt.title(f"Grafico circular - {column}", fontsize=20)
+    plt.ylabel("")
     plt.tight_layout()
-    plt.savefig('kde_histplot_2d.png', dpi=100, bbox_inches='tight')
-    plt.show()
+    plt.savefig(col_dir / "grafico_circular.png", dpi=100, bbox_inches="tight")
+    plt.close()
 
 
-# ============================================================================
-# 7. ANÁLISE DE CORRELAÇÕES FORTES E INSIGHTS
-# ============================================================================
+def save_value_counts(df: pd.DataFrame, column: str, base_dir: Path) -> None:
+    col_dir = base_dir / safe_name(column)
+    col_dir.mkdir(parents=True, exist_ok=True)
 
-print("\n" + "=" * 80)
-print("7. ANÁLISE DE CORRELAÇÕES FORTES E INSIGHTS")
+    counts = df[column].fillna("Missing").value_counts(dropna=False)
+    plt.figure(figsize=(10, 6))
+    counts.plot(kind="bar", edgecolor="black")
+    plt.title(f"Contagem - {column}", fontsize=20)
+    plt.xlabel(column, fontsize=17)
+    plt.ylabel("Frequencia", fontsize=17)
+    plt.xticks(rotation=45, ha="right", fontsize=14)
+    plt.yticks(fontsize=14)
+    plt.tight_layout()
+    plt.savefig(col_dir / "contagem.png", dpi=100, bbox_inches="tight")
+    plt.close()
+
+
+print("=" * 80)
+print("ANALISE DE VISUALIZACAO")
 print("=" * 80)
 
-# 7.1 Identificar correlações fortes
-print("\nCORRELAÇÕES FORTES (|r| > 0.7):")
-print("-" * 80)
+df = pd.read_csv(BASE_DIR / "CVD_cleaned.csv")
 
-strong_correlations = []
-for i in range(len(correlation_matrix.columns)):
-    for j in range(i+1, len(correlation_matrix.columns)):
-        if abs(correlation_matrix.iloc[i, j]) > 0.7:
-            strong_correlations.append({
-                'Variável 1': correlation_matrix.columns[i],
-                'Variável 2': correlation_matrix.columns[j],
-                'Correlação': correlation_matrix.iloc[i, j]
-            })
+print(f"Dataset: {df.shape[0]} linhas x {df.shape[1]} colunas")
+print(f"Output: {OUTPUT_DIR}")
 
-if strong_correlations:
-    strong_corr_df = pd.DataFrame(strong_correlations)
-    print(strong_corr_df.to_string(index=False))
-else:
-    print("Nenhuma correlação forte (|r| > 0.7) encontrada.")
+ordinal_cols = ["General_Health", "Checkup", "Age_Category"]
+continuous_cols = [
+    "Height_(cm)",
+    "Weight_(kg)",
+    "BMI",
+    "Alcohol_Consumption",
+    "Fruit_Consumption",
+    "Green_Vegetables_Consumption",
+    "FriedPotato_Consumption",
+]
+binary_cols = [
+    "Exercise",
+    "Heart_Disease",
+    "Skin_Cancer",
+    "Other_Cancer",
+    "Depression",
+    "Arthritis",
+    "Sex",
+    "Smoking_History",
+]
+indeterminate_cols = ["Diabetes"]
 
+available_cols = set(df.columns)
 
-# ============================================================================
-# 8. RESUMO FINAL
-# ============================================================================
+print("\nGerando histogramas para variaveis ordinais...")
+for col in ordinal_cols:
+    if col in available_cols:
+        save_histogram(df, col, ORDINAL_DIR, order=ORDINAL_ORDER.get(col))
 
-print("\n" + "=" * 80)
-print("RESUMO DA ANÁLISE EXPLORATÓRIA")
-print("=" * 80)
-print(f"\nDimensões do dataset: {df.shape[0]} linhas, {df.shape[1]} colunas")
-print(f"\nVariáveis numéricas: {len(numerical_cols)}")
-print(f"  {', '.join(numerical_cols)}")
-print(f"\nVariáveis categóricas: {len(categorical_cols)}")
-print(f"  {', '.join(categorical_cols)}")
-print(f"\nValores faltantes: {df.isnull().sum().sum()}")
-print("\nTécnicas de visualização aplicadas:")
-print("  ✓ Histogramas e Densidade (KDE)")
-print("  ✓ Diagramas de Caixa (Box Plots)")
-print("  ✓ Gráficos de Dispersão (Scatter Plots)")
-print("  ✓ Gráficos de Barras e Contagem")
-print("  ✓ Gráficos de Pizza")
-print("  ✓ Joint Plots (Distribuição Conjunta)")
-print("  ✓ Pair Plots (Matriz de Relacionamentos)")
-print("  ✓ FacetGrid (Segmentação)")
-print("  ✓ Categorical Plots")
-print("  ✓ Heatmaps de Correlação")
-print("  ✓ KDE 2D e Histogramas 2D")
-print("\n" + "=" * 80)
-print("Análise concluída! Todos os gráficos foram salvos em PNG.")
-print("=" * 80)
+print("Gerando histogramas para variaveis continuas...")
+for col in continuous_cols:
+    if col in available_cols:
+        save_histogram(df, col, CONTINUA_DIR)
+
+print("Gerando graficos circulares para variaveis binarias...")
+for col in binary_cols:
+    if col in available_cols:
+        save_pie_chart(df, col, BINARIA_DIR)
+
+print("Gerando grafico de contagem para a variavel com classificacao indeterminada...")
+for col in indeterminate_cols:
+    if col in available_cols:
+        save_value_counts(df, col, INDETERMINADA_DIR)
+
+print("\nResumo:")
+print(f"- Ordinais: {', '.join([c for c in ordinal_cols if c in available_cols])}")
+print(f"- Continuas: {', '.join([c for c in continuous_cols if c in available_cols])}")
+print(f"- Binarias: {', '.join([c for c in binary_cols if c in available_cols])}")
+print(f"- Indeterminadas: {', '.join([c for c in indeterminate_cols if c in available_cols])}")
+print("\nConcluido. Todos os graficos foram guardados em subpastas dentro de output.")
