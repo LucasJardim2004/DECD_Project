@@ -1,0 +1,159 @@
+==============================================================================================================
+ANALISE ORIENTADA A HEART_DISEASE - CVD_CLEANED
+==============================================================================================================
+
+ASSOCIACAO ENTRE VARIAVEIS CATEGORICAS E A VARIAVEL ALVO (Heart_Disease)
+----------------------------------------------------------------------------------------------------
+       variavel        target cramers_v       forca
+ General_Health Heart_Disease    0.2495 muito fraca
+   Age_Category Heart_Disease    0.2416 muito fraca
+       Diabetes Heart_Disease    0.1836 muito fraca
+      Arthritis Heart_Disease    0.1539 muito fraca
+Smoking_History Heart_Disease    0.1078 muito fraca
+       Exercise Heart_Disease    0.0963 muito fraca
+        Checkup Heart_Disease    0.0940 muito fraca
+   Other_Cancer Heart_Disease    0.0924 muito fraca
+    Skin_Cancer Heart_Disease    0.0908 muito fraca
+            Sex Heart_Disease    0.0726 muito fraca
+     Depression Heart_Disease    0.0325 muito fraca
+
+TABELAS DE CONTINGENCIA NORMALIZADAS POR CATEGORIA (Heart_Disease)
+----------------------------------------------------------------------------------------------------
+General_Health vs Heart_Disease
+Heart_Disease     No   Yes
+General_Health            
+Excellent      98.01  1.99
+Fair           81.04 18.96
+Good           90.94  9.06
+Poor           68.21 31.79
+Very Good      95.63  4.37
+
+Checkup vs Heart_Disease
+Heart_Disease              No  Yes
+Checkup                           
+5 or more years ago     97.45 2.55
+Never                   95.88 4.12
+Within the past 2 years 96.06 3.94
+Within the past 5 years 97.30 2.70
+Within the past year    90.54 9.46
+
+Exercise vs Heart_Disease
+Heart_Disease    No   Yes
+Exercise                 
+No            87.04 12.96
+Yes           93.33  6.67
+
+Skin_Cancer vs Heart_Disease
+Heart_Disease    No   Yes
+Skin_Cancer              
+No            92.73  7.27
+Yes           84.36 15.64
+
+Other_Cancer vs Heart_Disease
+Heart_Disease    No   Yes
+Other_Cancer             
+No            92.74  7.26
+Yes           84.22 15.78
+
+Depression vs Heart_Disease
+Heart_Disease    No  Yes
+Depression              
+No            92.36 7.64
+Yes           90.14 9.86
+
+Diabetes vs Heart_Disease
+Heart_Disease                                 No   Yes
+Diabetes                                              
+No                                         93.94  6.06
+No, pre-diabetes or borderline diabetes    88.49 11.51
+Yes                                        79.15 20.85
+Yes, but female told only during pregnancy 96.37  3.63
+
+Arthritis vs Heart_Disease
+Heart_Disease    No   Yes
+Arthritis                
+No            94.84  5.16
+Yes           85.90 14.10
+
+Sex vs Heart_Disease
+Heart_Disease    No   Yes
+Sex                      
+Female        93.82  6.18
+Male          89.86 10.14
+
+Age_Category vs Heart_Disease
+Heart_Disease    No   Yes
+Age_Category             
+18-24         99.50  0.50
+25-29         99.27  0.73
+30-34         98.91  1.09
+35-39         98.67  1.33
+40-44         97.99  2.01
+45-49         96.77  3.23
+50-54         95.29  4.71
+55-59         92.90  7.10
+60-64         90.71  9.29
+65-69         88.57 11.43
+70-74         85.34 14.66
+75-79         81.88 18.12
+80+           78.20 21.80
+
+Smoking_History vs Heart_Disease
+Heart_Disease      No   Yes
+Smoking_History            
+No              94.34  5.66
+Yes             88.36 11.64
+
+INFLUENCIA DAS VARIAVEIS CATEGORICAS COM CRAMERS_V > 0.1
+----------------------------------------------------------------------------------------------------
+General_Health (Cramer's V=0.2495)
+categoria      n taxa_yes taxa_yes_pct delta_vs_global_pp risco_relativo
+Excellent  55954   0.0199         1.99              -6.09          0.246
+     Fair  35810   0.1896        18.96             +10.87          2.345
+     Good  95364   0.0906         9.06              +0.98          1.121
+     Poor  11331   0.3179        31.79             +23.70          3.932
+Very Good 110395   0.0437         4.37              -3.72          0.540
+
+Age_Category (Cramer's V=0.2416)
+categoria     n taxa_yes taxa_yes_pct delta_vs_global_pp risco_relativo
+    18-24 18681   0.0050         0.50              -7.58          0.062
+    25-29 15494   0.0073         0.73              -7.36          0.090
+    30-34 18428   0.0109         1.09              -6.99          0.135
+    35-39 20606   0.0133         1.33              -6.76          0.164
+    40-44 21595   0.0201         2.01              -6.07          0.249
+    45-49 20968   0.0323         3.23              -4.85          0.400
+    50-54 25097   0.0471         4.71              -3.38          0.582
+    55-59 28054   0.0710         7.10              -0.99          0.878
+    60-64 32418   0.0929         9.29              +1.21          1.149
+    65-69 33434   0.1143        11.43              +3.35          1.414
+    70-74 31103   0.1466        14.66              +6.58          1.814
+    75-79 20705   0.1812        18.12             +10.04          2.241
+      80+ 22271   0.2180        21.80             +13.72          2.697
+
+Diabetes (Cramer's V=0.1836)
+                                 categoria      n taxa_yes taxa_yes_pct delta_vs_global_pp risco_relativo
+                                        No 259141   0.0606         6.06              -2.02          0.750
+   No, pre-diabetes or borderline diabetes   6896   0.1151        11.51              +3.43          1.424
+                                       Yes  40171   0.2085        20.85             +12.77          2.579
+Yes, but female told only during pregnancy   2646   0.0363         3.63              -4.46          0.449
+
+Arthritis (Cramer's V=0.1539)
+categoria      n taxa_yes taxa_yes_pct delta_vs_global_pp risco_relativo
+       No 207783   0.0516         5.16              -2.93          0.638
+      Yes 101071   0.1410        14.10              +6.02          1.744
+
+Smoking_History (Cramer's V=0.1078)
+categoria      n taxa_yes taxa_yes_pct delta_vs_global_pp risco_relativo
+       No 183590   0.0566         5.66              -2.43          0.700
+      Yes 125264   0.1164        11.64              +3.56          1.440
+
+ASSOCIACAO ENTRE VARIAVEIS NUMERICAS E A VARIAVEL ALVO (Heart_Disease)
+----------------------------------------------------------------------------------------------------
+                    variavel        target pearson_r       forca media_no media_yes diferenca_media
+                 Weight_(kg) Heart_Disease    0.0459 muito fraca    83.30     86.89            3.59
+                         BMI Heart_Disease    0.0427 muito fraca    28.54     29.56            1.02
+                 Height_(cm) Heart_Disease    0.0158 muito fraca   170.57    171.18            0.62
+     FriedPotato_Consumption Heart_Disease   -0.0092 muito fraca     6.32      6.03           -0.29
+           Fruit_Consumption Heart_Disease   -0.0201 muito fraca    29.98     28.15           -1.83
+Green_Vegetables_Consumption Heart_Disease   -0.0240 muito fraca    15.22     13.90           -1.32
+         Alcohol_Consumption Heart_Disease   -0.0366 muito fraca     5.19      4.09           -1.10
