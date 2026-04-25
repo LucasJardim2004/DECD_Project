@@ -1,0 +1,3 @@
+partition,n_clusters,silhouette,calinski_harabasz,davies_bouldin
+corte_sugerido_dendrograma,10,0.07044457253786603,185.24842825578023,1.9462616526612408
+best_k_silhouette,6,0.10642857197478142,207.10901307110223,1.9481786898376139

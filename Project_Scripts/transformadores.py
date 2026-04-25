@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 
 AGE_CATEGORY_GROUPS: dict[str, str] = {
@@ -193,55 +194,103 @@ def encode_ordinal(series: pd.Series, col_name: str) -> pd.Series:
 
 
 def apply_minmax_scaling(df: pd.DataFrame, columns: list[str] | None = None) -> pd.DataFrame:
+    """
+    Apply Min-Max scaling to normalize values to [0, 1] range using scikit-learn.
+    
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Input dataframe
+    columns : list[str] | None
+        Columns to scale. If None, all numeric columns are scaled.
+    
+    Returns
+    -------
+    pd.DataFrame
+        Dataframe with scaled numeric columns
+    """
     out = df.copy()
     if columns is None:
         columns = out.select_dtypes(include=[np.number]).columns.tolist()
 
-    for col in columns:
-        series = pd.to_numeric(out[col], errors="coerce")
-        min_v = series.min()
-        max_v = series.max()
+    # Filter only existing columns
+    columns = [col for col in columns if col in out.columns]
+    
+    if not columns:
+        return out
 
-        if pd.isna(min_v) or pd.isna(max_v):
-            continue
-
-        if max_v == min_v:
-            out[col] = 0.0
-        else:
-            out[col] = (series - min_v) / (max_v - min_v)
+    # Use MinMaxScaler from sklearn
+    scaler = MinMaxScaler(feature_range=(0, 1))
+    out[columns] = scaler.fit_transform(out[columns])
 
     return out
 
 
 def apply_zscore_scaling(df: pd.DataFrame, columns: list[str] | None = None) -> pd.DataFrame:
+    """
+    Apply Z-score (StandardScaler) normalization using scikit-learn.
+    
+    Transforms attributes so that the distribution of values has mean zero 
+    and standard deviation of one.
+    
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Input dataframe
+    columns : list[str] | None
+        Columns to scale. If None, all numeric columns are scaled.
+    
+    Returns
+    -------
+    pd.DataFrame
+        Dataframe with scaled numeric columns
+    """
     out = df.copy()
     if columns is None:
         columns = out.select_dtypes(include=[np.number]).columns.tolist()
 
-    for col in columns:
-        series = pd.to_numeric(out[col], errors="coerce")
-        mean_v = series.mean()
-        std_v = series.std(ddof=0)
+    # Filter only existing columns
+    columns = [col for col in columns if col in out.columns]
+    
+    if not columns:
+        return out
 
-        if pd.isna(mean_v) or pd.isna(std_v):
-            continue
-
-        if std_v == 0:
-            out[col] = 0.0
-        else:
-            out[col] = (series - mean_v) / std_v
+    # Use StandardScaler from sklearn
+    scaler = StandardScaler()
+    out[columns] = scaler.fit_transform(out[columns])
 
     return out
 
 
 def apply_decimal_scaling(df: pd.DataFrame, columns: list[str] | None = None) -> pd.DataFrame:
     """
-    Apply decimal scaling: x' = x / 10^j,
+    Apply decimal scaling normalization: x' = x / 10^j
+    
     where j is the smallest integer such that max(|x'|) < 1.
+    This ensures all values are scaled to be less than 1 in absolute value
+    by dividing by an appropriate power of 10.
+    
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Input dataframe
+    columns : list[str] | None
+        Columns to scale. If None, all numeric columns are scaled.
+    
+    Returns
+    -------
+    pd.DataFrame
+        Dataframe with decimal-scaled numeric columns
     """
     out = df.copy()
     if columns is None:
         columns = out.select_dtypes(include=[np.number]).columns.tolist()
+
+    # Filter only existing columns
+    columns = [col for col in columns if col in out.columns]
+    
+    if not columns:
+        return out
 
     for col in columns:
         series = pd.to_numeric(out[col], errors="coerce")
@@ -251,6 +300,7 @@ def apply_decimal_scaling(df: pd.DataFrame, columns: list[str] | None = None) ->
             out[col] = 0.0 if max_abs == 0 else series
             continue
 
+        # Calculate j: smallest integer such that max(|x'|) < 1
         j = int(np.ceil(np.log10(max_abs + 1e-12)))
         scale = 10 ** j
         out[col] = series / scale

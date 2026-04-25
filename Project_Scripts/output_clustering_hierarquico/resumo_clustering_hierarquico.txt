@@ -1,0 +1,34 @@
+ANALISE DE CLUSTERING HIERARQUICO (WARD) - DADOS Z-SCORE
+
+Ficheiro de entrada: /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_preparacao/CVD_numeric_zscore.csv
+N linhas totais (sem NA): 308854
+N linhas usadas na analise hierarquica: 2500
+N atributos numericos: 18
+
+RECOMENDACAO DE CORTE DO DENDROGRAMA
+Distancia sugerida para corte: 27.236482
+Maior salto entre fusoes: 8.576630 (indice de fusao 2489)
+N clusters resultante do corte sugerido: 10
+
+VALIDACAO AUXILIAR (SILHOUETTE PARA k=2..10)
+Melhor k por silhouette: 6
+Melhor silhouette: 0.106429
+
+METRICAS INTERNAS (PARTICOES ANALISADAS)
+Corte sugerido -> silhouette=0.070445, calinski_harabasz=185.248, davies_bouldin=1.946262
+Best k silhouette -> silhouette=0.106429, calinski_harabasz=207.109, davies_bouldin=1.948179
+
+FICHEIROS GERADOS
+- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/dendrograma_lastp.png
+- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/dendrograma_level.png
+- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/distancias_fusoes_dendrograma.csv
+- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/silhouette_hierarquico_k2_k10.csv
+- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/silhouette_hierarquico_k2_k10.png
+- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/pca_clusters_corte_sugerido.png
+- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/pca_clusters_bestk_silhouette.png
+- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/metricas_internas_clusters.csv
+- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/caracterizacao_clusters_corte_sugerido.csv
+- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/caracterizacao_clusters_bestk_silhouette.csv
+- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/exemplos_representativos_corte_sugerido.csv
+- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/exemplos_representativos_bestk_silhouette.csv
+- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/amostra_clusters_corte_sugerido.csv
