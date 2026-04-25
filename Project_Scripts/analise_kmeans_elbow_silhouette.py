@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
 
 
 def ensure_dir(path: Path) -> None:
@@ -43,6 +44,12 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=30000,
         help="Max number of rows used for clustering metrics.",
+    )
+    parser.add_argument(
+        "--silhouette-sample-size",
+        type=int,
+        default=5000,
+        help="Max number of rows used for silhouette calculation.",
     )
     parser.add_argument(
         "--random-state",
@@ -76,6 +83,7 @@ def load_numeric_data(csv_path: Path, sample_size: int, random_state: int) -> tu
 
 def run_kmeans_grid(
     X: np.ndarray,
+    X_silhouette: np.ndarray,
     k_values: list[int],
     random_state: int,
     n_init: int,
@@ -86,10 +94,14 @@ def run_kmeans_grid(
         model = KMeans(n_clusters=k, random_state=random_state, n_init=n_init)
         model.fit(X)
 
+        labels_silhouette = model.predict(X_silhouette)
+        silhouette = float(silhouette_score(X_silhouette, labels_silhouette))
+
         rows.append(
             {
                 "k": k,
                 "inertia": float(model.inertia_),
+                "silhouette": silhouette,
             }
         )
 
@@ -112,6 +124,13 @@ def recommend_k_elbow(res: pd.DataFrame, elbow_threshold_pct: float) -> int:
     return int(res.iloc[-1]["k"])
 
 
+def recommend_k_silhouette(res: pd.DataFrame) -> int:
+    valid = res.dropna(subset=["silhouette"])
+    if valid.empty:
+        return int(res.iloc[0]["k"])
+    return int(valid.loc[valid["silhouette"].idxmax(), "k"])
+
+
 def plot_elbow(res: pd.DataFrame, k_elbow: int, output_file: Path) -> None:
     plt.figure(figsize=(8, 5))
     plt.plot(res["k"], res["inertia"], marker="o", color="tab:blue")
@@ -119,6 +138,20 @@ def plot_elbow(res: pd.DataFrame, k_elbow: int, output_file: Path) -> None:
     plt.title("Metodo do Cotovelo - KMeans")
     plt.xlabel("k")
     plt.ylabel("Inertia (SSE)")
+    plt.grid(alpha=0.3)
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(output_file, dpi=150)
+    plt.close()
+
+
+def plot_silhouette(res: pd.DataFrame, k_silhouette: int, output_file: Path) -> None:
+    plt.figure(figsize=(8, 5))
+    plt.plot(res["k"], res["silhouette"], marker="o", color="tab:green")
+    plt.axvline(k_silhouette, linestyle="--", color="orange", label=f"Best silhouette k={k_silhouette}")
+    plt.title("Silhouette Score - KMeans")
+    plt.xlabel("k")
+    plt.ylabel("Silhouette")
     plt.grid(alpha=0.3)
     plt.legend()
     plt.tight_layout()
@@ -149,31 +182,46 @@ def main() -> None:
         random_state=args.random_state,
     )
     X = sample_df.to_numpy()
+    if args.silhouette_sample_size > 0 and len(sample_df) > args.silhouette_sample_size:
+        silhouette_df = sample_df.sample(n=args.silhouette_sample_size, random_state=args.random_state)
+    else:
+        silhouette_df = sample_df
+    X_silhouette = silhouette_df.to_numpy()
 
     k_values = list(range(args.k_min, args.k_max + 1))
     res = run_kmeans_grid(
         X=X,
+        X_silhouette=X_silhouette,
         k_values=k_values,
         random_state=args.random_state,
         n_init=args.n_init,
     )
 
     k_recommended = recommend_k_elbow(res, elbow_threshold_pct=10.0)
+    k_silhouette = recommend_k_silhouette(res)
 
     metrics_path = output_dir / "kmeans_elbow_metrics.csv"
+    combined_metrics_path = output_dir / "kmeans_elbow_silhouette_metrics.csv"
     elbow_plot_path = output_dir / "elbow_kmeans.png"
+    silhouette_plot_path = output_dir / "silhouette_kmeans.png"
 
     res.to_csv(metrics_path, index=False)
+    res.to_csv(combined_metrics_path, index=False)
     plot_elbow(res, k_recommended, elbow_plot_path)
+    plot_silhouette(res, k_silhouette, silhouette_plot_path)
 
     print("KMeans analysis finished.")
     print(f"Input CSV: {csv_path}")
     print(f"Rows total: {len(full_df)}")
     print(f"Rows used: {len(sample_df)}")
+    print(f"Rows used for silhouette: {len(silhouette_df)}")
     print(f"Columns used: {', '.join(full_df.columns)}")
     print(f"Recommended k (elbow proxy): {k_recommended}")
+    print(f"Recommended k (silhouette): {k_silhouette}")
     print(f"Saved metrics: {metrics_path}")
+    print(f"Saved combined metrics: {combined_metrics_path}")
     print(f"Saved elbow plot: {elbow_plot_path}")
+    print(f"Saved silhouette plot: {silhouette_plot_path}")
 
 
 if __name__ == "__main__":

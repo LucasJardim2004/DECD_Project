@@ -389,11 +389,16 @@ def main() -> None:
         s=10,
         alpha=0.7,
     )
-    plt.title("KMeans Final (k=9) - PCA 2D")
+    plt.title(f"KMeans Final (k={args.clusters}) - PCA 2D")
     plt.xlabel("PC1")
     plt.ylabel("PC2")
     plt.grid(alpha=0.2)
-    legend = plt.legend(*scatter.legend_elements(num=9), title="Cluster", loc="best", fontsize=8)
+    legend = plt.legend(
+        *scatter.legend_elements(num=args.clusters),
+        title="Cluster",
+        loc="best",
+        fontsize=8,
+    )
     plt.gca().add_artist(legend)
     plt.tight_layout()
 
