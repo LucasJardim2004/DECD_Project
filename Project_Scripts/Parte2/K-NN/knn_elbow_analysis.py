@@ -143,7 +143,7 @@ def plot_elbow_curve(results: dict) -> None:
     k_values = results['k_values']
     train_scores = results['train_scores']
     cv_scores = results['cv_scores']
-    cv_stds = results['cv_stds']
+    cv_stds = results['cv_stds']['accuracy'] if isinstance(results['cv_stds'], dict) else results['cv_stds']
     best_k = results['best_k']
     
     fig, ax = plt.subplots(figsize=(12, 6))
@@ -153,10 +153,12 @@ def plot_elbow_curve(results: dict) -> None:
             label='Acurácia no Treino', alpha=0.7)
     ax.plot(k_values, cv_scores, 's-', linewidth=2, markersize=4,
             label=f'Acurácia CV (5-folds)', alpha=0.7)
-    ax.fill_between(k_values, 
-                     np.array(cv_scores) - np.array(cv_stds),
-                     np.array(cv_scores) + np.array(cv_stds),
-                     alpha=0.2)
+    ax.fill_between(
+        k_values,
+        np.array(cv_scores) - np.array(cv_stds),
+        np.array(cv_scores) + np.array(cv_stds),
+        alpha=0.2,
+    )
     
     # Destaque K ótimo
     best_cv = cv_scores[best_k - 1]
