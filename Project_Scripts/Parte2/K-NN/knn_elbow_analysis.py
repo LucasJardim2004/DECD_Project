@@ -88,40 +88,53 @@ def elbow_method_analysis(X_train: pd.DataFrame, y_train: pd.Series) -> dict:
     
     k_values = range(1, K_MAX + 1)
     train_scores = []
-    cv_scores = []
-    cv_stds = []
-    
-    print("Testando K de 1 a 30 com validação cruzada (5 folds)...")
-    
+
+    # Vamos calcular várias métricas em CV e escolher K com base numa métrica alvo
+    scoring = ['accuracy', 'precision', 'recall', 'f1', 'roc_auc']
+    cv_means: dict = {m: [] for m in scoring}
+    cv_stds: dict = {m: [] for m in scoring}
+
+    print(f"Testando K de 1 a {K_MAX} com validação cruzada ({CV_FOLDS} folds)...")
+
+    from sklearn.model_selection import StratifiedKFold
+    cv = StratifiedKFold(n_splits=CV_FOLDS, shuffle=True, random_state=RANDOM_STATE)
+
     for k in k_values:
-        # Criar modelo
         knn = KNeighborsClassifier(n_neighbors=k, n_jobs=-1)
-        
-        # Treino no conjunto todo
         knn.fit(X_train, y_train)
         train_score = knn.score(X_train, y_train)
         train_scores.append(train_score)
-        
-        # Validação cruzada
-        cv_score = cross_val_score(knn, X_train, y_train, cv=CV_FOLDS, scoring='accuracy')
-        cv_scores.append(cv_score.mean())
-        cv_stds.append(cv_score.std())
-        
-        if k % 5 == 0 or k == 1:
-            print(f"  K={k:2d}: Treino={train_score:.4f}, CV={cv_score.mean():.4f} (±{cv_score.std():.4f})")
-    
-    # Encontrar melhor K
-    best_k = np.argmax(cv_scores) + 1
-    best_cv_score = cv_scores[best_k - 1]
-    
-    print(f"\n✓ Melhor K encontrado: {best_k} com CV Score: {best_cv_score:.4f}")
-    
+
+        # cross_validate para múltiplas métricas
+        res = cross_validate(knn, X_train, y_train, cv=cv, scoring=scoring, n_jobs=-1, return_train_score=False)
+        for m in scoring:
+            scores = res[f'test_{m}']
+            cv_means[m].append(scores.mean())
+            cv_stds[m].append(scores.std())
+
+        # Mostrar progresso para cada K
+        print(f"  K={k:2d}: Treino={train_score:.4f}, CV_recall={cv_means['recall'][-1]:.4f}, CV_f1={cv_means['f1'][-1]:.4f}")
+
+    # Escolha do K: por recall médio (mudar 'recall' para 'f1' ou 'roc_auc' se preferir)
+    metric_to_optimize = 'recall'
+    best_k_idx = int(np.argmax(cv_means[metric_to_optimize]))
+    best_k = best_k_idx + 1
+    best_cv_score = cv_means[metric_to_optimize][best_k_idx]
+
+    print(f"\n✓ Melhor K encontrado (por {metric_to_optimize}): {best_k} com CV {metric_to_optimize}: {best_cv_score:.4f}")
+
+    # Para compatibilidade com o resto do script, mantenho 'cv_scores' como accuracy
+    cv_scores_accuracy = cv_means['accuracy']
+
     return {
         'k_values': list(k_values),
         'train_scores': train_scores,
-        'cv_scores': cv_scores,
+        'cv_scores': cv_scores_accuracy,
         'cv_stds': cv_stds,
-        'best_k': best_k
+        'cv_means': cv_means,
+        'best_k': best_k,
+        'best_cv_score': best_cv_score,
+        'optimized_metric': metric_to_optimize
     }
 
 
@@ -337,12 +350,16 @@ ARQUIVOS GERADOS:
 def save_detailed_results(results: dict, evaluation: dict) -> None:
     """Salvar resultados detalhados em CSV."""
     
-    # Resultados do método do cotovelo
+    # Resultados do método do cotovelo - salvar múltiplas métricas
     elbow_df = pd.DataFrame({
         'K': results['k_values'],
         'Train_Accuracy': results['train_scores'],
-        'CV_Accuracy': results['cv_scores'],
-        'CV_Std': results['cv_stds']
+        'CV_Accuracy': results['cv_means']['accuracy'],
+        'CV_Precision': results['cv_means']['precision'],
+        'CV_Recall': results['cv_means']['recall'],
+        'CV_F1': results['cv_means']['f1'],
+        'CV_ROC_AUC': results['cv_means']['roc_auc'],
+        'CV_Std_Recall': results['cv_stds']['recall']
     })
     elbow_df.to_csv(OUTPUT_DIR / "knn_elbow_results.csv", index=False)
     print(f"✓ Resultados do cotovelo: {OUTPUT_DIR}/knn_elbow_results.csv")
@@ -367,7 +384,8 @@ def main():
     results['X_test'] = X_test
     results['y_train'] = y_train
     results['y_test'] = y_test
-    results['best_cv_score'] = results['cv_scores'][results['best_k'] - 1]
+    # best_cv_score já é definido na função (para a métrica optimizada)
+    results['best_cv_score'] = results.get('best_cv_score', results['cv_scores'][results['best_k'] - 1])
     
     # 3. Plotar curva do cotovelo
     plot_elbow_curve(results)
