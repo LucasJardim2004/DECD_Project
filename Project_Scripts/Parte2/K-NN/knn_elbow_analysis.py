@@ -142,33 +142,39 @@ def plot_elbow_curve(results: dict) -> None:
     """Plotar curva do cotovelo."""
     k_values = results['k_values']
     train_scores = results['train_scores']
-    cv_scores = results['cv_scores']
-    cv_stds = results['cv_stds']['accuracy'] if isinstance(results['cv_stds'], dict) else results['cv_stds']
     best_k = results['best_k']
+    
+    # Obter a métrica que foi usada para otimização
+    metric = results['optimized_metric']
+    cv_means = results['cv_means'][metric]
+    cv_stds = results['cv_stds'][metric]
+    
+    # Labels formatados para display
+    metric_label = metric.upper() if metric != 'roc_auc' else 'ROC-AUC'
     
     fig, ax = plt.subplots(figsize=(12, 6))
     
-    # Plot
+    # Plot - mostrar a métrica de otimização, não acurácia
     ax.plot(k_values, train_scores, 'o-', linewidth=2, markersize=4, 
-            label='Acurácia no Treino', alpha=0.7)
-    ax.plot(k_values, cv_scores, 's-', linewidth=2, markersize=4,
-            label=f'Acurácia CV (5-folds)', alpha=0.7)
+        label='Acurácia no Treino', alpha=0.7)
+    ax.plot(k_values, cv_means, 's-', linewidth=2, markersize=4,
+        label=f'{metric_label} CV (5-folds)', alpha=0.7)
     ax.fill_between(
-        k_values,
-        np.array(cv_scores) - np.array(cv_stds),
-        np.array(cv_scores) + np.array(cv_stds),
-        alpha=0.2,
+    k_values,
+    np.array(cv_means) - np.array(cv_stds),
+    np.array(cv_means) + np.array(cv_stds),
+    alpha=0.2,
     )
     
     # Destaque K ótimo
-    best_cv = cv_scores[best_k - 1]
+    best_cv = cv_means[best_k - 1]
     ax.plot(best_k, best_cv, 'r*', markersize=20, label=f'Melhor K={best_k}')
     ax.axvline(x=best_k, color='red', linestyle='--', alpha=0.5)
     
     ax.set_xlabel('Valor de K', fontsize=12, fontweight='bold')
-    ax.set_ylabel('Acurácia', fontsize=12, fontweight='bold')
-    ax.set_title('Método do Cotovelo para K-NN\nEncontrar Melhor Número de Vizinhos', 
-                 fontsize=14, fontweight='bold')
+    ax.set_ylabel(f'{metric_label}', fontsize=12, fontweight='bold')
+    ax.set_title(f'Método do Cotovelo para K-NN\nOtimizado por {metric_label}', 
+         fontsize=14, fontweight='bold')
     ax.legend(fontsize=10)
     ax.grid(True, alpha=0.3)
     ax.set_xticks(range(1, K_MAX + 1, 2))
@@ -318,8 +324,9 @@ CONFIGURAÇÃO:
 MÉTODO DO COTOVELO:
 - Testados valores de K: 1 a 30
 - Validação Cruzada: {CV_FOLDS} folds
-- Melhor K encontrado: {best_k}
-- CV Score (melhor K): {results['best_cv_score']:.4f}
+    - Melhor K encontrado: {best_k}
+    - Métrica usada para selecionar K: {results.get('optimized_metric', 'accuracy').upper()}
+    - CV Score (melhor K): {results['best_cv_score']:.4f}
 
 RESULTADOS NO CONJUNTO DE TESTE:
 - Acurácia:  {evaluation['accuracy']:.4f}
@@ -347,6 +354,9 @@ ARQUIVOS GERADOS:
         f.write(summary_text)
     
     print(f"✓ Resumo salvo: {OUTPUT_DIR}/knn_results_summary.txt")
+
+    # Informação adicional em output terminal
+    print(f"✓ Métrica usada para selecionar K: {results.get('optimized_metric', 'accuracy').upper()}")
 
 
 def save_detailed_results(results: dict, evaluation: dict) -> None:
