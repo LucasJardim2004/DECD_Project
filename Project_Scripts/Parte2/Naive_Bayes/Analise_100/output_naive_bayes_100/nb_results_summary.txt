@@ -1,0 +1,47 @@
+
+================================================================================
+   NAIVE BAYES CLASSIFICATION - HEART DISEASE PREDICTION
+================================================================================
+
+CONFIGURAÇÃO:
+  - Modelo: GaussianNB (sklearn)
+  - Dataset Treino: CVD_train_85pct.csv (262526 registos)
+  - Dataset Teste:  CVD_test_15pct.csv  (46328 registos)
+  - Target: Heart_Disease (Classificação Binária)
+  - Validação Cruzada: 5 folds (StratifiedKFold)
+
+RESULTADOS DA VALIDAÇÃO CRUZADA (TREINO):
+  - Accuracy:  0.8318 ± 0.0010
+  - Precision: 0.2361 ± 0.0037
+  - Recall:    0.4836 ± 0.0089
+  - F1-Score:  0.3173 ± 0.0053
+  - ROC-AUC:   0.7918 ± 0.0020
+
+RESULTADOS NO CONJUNTO DE TESTE:
+  - Accuracy:  0.8298
+  - Precision: 0.2316
+  - Recall:    0.4742
+  - F1-Score:  0.3112
+  - ROC-AUC:   0.7865
+
+  - Acurácia no Treino: 0.8319
+
+MATRIZ DE CONFUSÃO (TESTE):
+  - Verdadeiros Negativos (TN):  36662
+  - Falsos Positivos (FP):        5910
+  - Falsos Negativos (FN):        1975
+  - Verdadeiros Positivos (TP):   1781
+
+FICHEIROS GERADOS:
+  - naive_bayes_model.joblib        - Modelo treinado
+  - nb_cv_confusion_matrix.png      - Confusion matrix (validação cruzada)
+  - nb_cv_predictions.png           - Predições corretas vs incorretas (CV)
+  - nb_test_confusion_matrix.png    - Confusion matrix (teste)
+  - nb_evaluation_metrics.png       - Métricas, curva ROC, distribuições
+  - nb_feature_analysis.png         - Análise de features (parâmetros NB)
+  - nb_class_means.csv              - Médias por classe
+  - nb_class_variances.csv          - Variâncias por classe
+  - nb_feature_importance.csv       - Importância das features
+  - nb_results_summary.txt          - Este ficheiro
+
+================================================================================
