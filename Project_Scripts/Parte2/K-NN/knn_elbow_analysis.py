@@ -116,7 +116,7 @@ def elbow_method_analysis(X_train: pd.DataFrame, y_train: pd.Series) -> dict:
         print(f"  K={k:2d}: Treino={train_score:.4f}, CV_recall={cv_means['recall'][-1]:.4f}, CV_f1={cv_means['f1'][-1]:.4f}")
 
     # Escolha do K: por recall médio (mudar 'recall' para 'f1' ou 'roc_auc' se preferir)
-    metric_to_optimize = 'recall'
+    metric_to_optimize = 'f1'
     best_k_idx = int(np.argmax(cv_means[metric_to_optimize]))
     best_k = best_k_idx + 1
     best_cv_score = cv_means[metric_to_optimize][best_k_idx]
