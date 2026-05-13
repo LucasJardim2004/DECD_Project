@@ -1,0 +1,38 @@
+
+================================================================================
+K-NN CLASSIFICATION MODEL - HEART DISEASE PREDICTION
+================================================================================
+
+CONFIGURAÇÃO:
+- Dataset de Treino: CVD_train_reduced_425pct.csv (131263 registos)
+- Dataset de Teste: CVD_test_15pct.csv (46328 registos)
+- Target: Heart_Disease (Classificação Binária)
+- Método: K-Nearest Neighbors com Método do Cotovelo
+
+MÉTODO DO COTOVELO:
+- Testados valores de K IMPARES: 3, 5, 7, 9, 11, 13, 15
+- Validação Cruzada: 5 folds
+    - Melhor K encontrado: 3
+    - Métrica usada para selecionar K: RECALL
+    - CV Score (melhor K): 0.1229
+
+RESULTADOS NO CONJUNTO DE TESTE:
+- Acurácia:  0.9019
+- Precisão: 0.2727
+- Recall:    0.1257
+- F1-Score:  0.1720
+- ROC-AUC:   0.6375
+
+MATRIZ DE CONFUSÃO:
+- Verdadeiros Negativos (TN):  41313
+- Falsos Positivos (FP):       1259
+- Falsos Negativos (FN):       3284
+- Verdadeiros Positivos (TP):  472
+
+ARQUIVOS GERADOS:
+- knn_k3_model.joblib - Modelo treinado
+- knn_elbow_curve.png - Gráfico do método do cotovelo
+- knn_evaluation_metrics.png - Métricas de desempenho
+- knn_results_summary.txt - Este ficheiro
+
+================================================================================

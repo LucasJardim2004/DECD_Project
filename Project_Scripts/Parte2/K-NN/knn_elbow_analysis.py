@@ -34,10 +34,11 @@ warnings.filterwarnings('ignore')
 
 TRAIN_FILE = "CVD_train_85pct.csv"
 TEST_FILE = "CVD_test_15pct.csv"
-OUTPUT_DIR = Path("output_knn")
+REDUCED_TRAIN_FILE = "CVD_train_balanced_1to2.csv"
+OUTPUT_DIR = Path("output_knn_reduced")
 TARGET_COL = "Heart_Disease"
 RANDOM_STATE = 42
-K_MAX = 30
+K_MAX = 15
 CV_FOLDS = 5
 
 # Criar diretório de output
@@ -54,12 +55,68 @@ def print_section(title: str) -> None:
     print("=" * 90)
 
 
+def generate_reduced_dataset() -> str:
+    """
+    Gera dataset balanceado com proporção 1:2 (doentes:saudáveis).
+    Estratégia: Todos os 21,215 registos com doença + 42,430 registos sem doença aleatórios.
+    Objetivo: Melhorar Recall para evitar Falsos Negativos.
+    """
+    if Path(REDUCED_TRAIN_FILE).exists():
+        print(f"✓ Dataset balanceado já existe: {REDUCED_TRAIN_FILE}")
+        return REDUCED_TRAIN_FILE
+    
+    print("\n" + "=" * 90)
+    print("GERANDO DATASET BALANCEADO (1:2 - DOENTES:SAUDÁVEIS)".center(90))
+    print("=" * 90)
+    
+    df_train = pd.read_csv(TRAIN_FILE)
+    n_original = len(df_train)
+    print(f"\n1. Dataset original: {n_original} registos")
+    print(f"   - Heart_Disease=0 (saudáveis): {(df_train[TARGET_COL]==0).sum()}")
+    print(f"   - Heart_Disease=1 (doentes): {(df_train[TARGET_COL]==1).sum()}")
+    
+    # Separar em dois grupos
+    df_disease = df_train[df_train[TARGET_COL] == 1].copy()
+    df_healthy = df_train[df_train[TARGET_COL] == 0].copy()
+    
+    n_disease = len(df_disease)
+    n_healthy_target = n_disease * 2  # Para proporção 1:2
+    
+    print(f"\n2. Estratégia 1:2:")
+    print(f"   - Doentes (TODOS): {n_disease} registos")
+    print(f"   - Saudáveis (amostra): {n_healthy_target} de {len(df_healthy)} disponíveis")
+    
+    # Sample aleatório dos saudáveis
+    df_healthy_sample = df_healthy.sample(n=n_healthy_target, random_state=RANDOM_STATE)
+    
+    # Concatenar e embaralhar
+    df_balanced = pd.concat([df_disease, df_healthy_sample], ignore_index=True)
+    df_balanced = df_balanced.sample(frac=1, random_state=RANDOM_STATE).reset_index(drop=True)
+    
+    # Salvar
+    df_balanced.to_csv(REDUCED_TRAIN_FILE, index=False)
+    
+    # Estatísticas finais
+    n_final = len(df_balanced)
+    n_disease_final = (df_balanced[TARGET_COL] == 1).sum()
+    n_healthy_final = (df_balanced[TARGET_COL] == 0).sum()
+    
+    print(f"\n3. Dataset balanceado gerado com sucesso:")
+    print(f"   - Total: {n_final} registos ({n_final/n_original*100:.1f}% dos originais)")
+    print(f"   - Heart_Disease=0: {n_healthy_final} ({n_healthy_final/n_final*100:.2f}%)")
+    print(f"   - Heart_Disease=1: {n_disease_final} ({n_disease_final/n_final*100:.2f}%)")
+    print(f"   - Proporção: 1:{n_healthy_final/n_disease_final:.2f} (doentes:saudáveis)")
+    print(f"   - Ficheiro: {REDUCED_TRAIN_FILE}\n")
+    
+    return REDUCED_TRAIN_FILE
+
+
 def load_data() -> tuple[pd.DataFrame, pd.Series, pd.DataFrame, pd.Series]:
     """Carregar dados de treino e teste."""
     print("Carregando dados...")
     
-    # Treino
-    df_train = pd.read_csv(TRAIN_FILE)
+    # Treino (dataset reduzido)
+    df_train = pd.read_csv(REDUCED_TRAIN_FILE)
     X_train = df_train.drop(columns=[TARGET_COL])
     y_train = df_train[TARGET_COL]
     
@@ -79,14 +136,15 @@ def load_data() -> tuple[pd.DataFrame, pd.Series, pd.DataFrame, pd.Series]:
 
 def elbow_method_analysis(X_train: pd.DataFrame, y_train: pd.Series) -> dict:
     """
-    Método do cotovelo: testar K de 1 a 30 com validação cruzada.
+    Método do cotovelo: testar apenas K IMPARES de 3 a 15 com validação cruzada.
     
     Returns:
         Dicionário com resultados: k_values, train_scores, cv_scores, best_k
     """
-    print_section("MÉTODO DO COTOVELO - TESTANDO DIFERENTES VALORES DE K")
+    print_section("MÉTODO DO COTOVELO - TESTANDO DIFERENTES VALORES DE K IMPARES")
     
-    k_values = range(1, K_MAX + 1)
+    # Apenas K impares: 3, 5, 7, 9, 11, 13, 15
+    k_values = range(3, K_MAX + 1, 2)
     train_scores = []
 
     # Vamos calcular várias métricas em CV e escolher K com base numa métrica alvo
@@ -94,7 +152,7 @@ def elbow_method_analysis(X_train: pd.DataFrame, y_train: pd.Series) -> dict:
     cv_means: dict = {m: [] for m in scoring}
     cv_stds: dict = {m: [] for m in scoring}
 
-    print(f"Testando K de 1 a {K_MAX} com validação cruzada ({CV_FOLDS} folds)...")
+    print(f"Testando K impares de 3 a {K_MAX} com validação cruzada ({CV_FOLDS} folds)...")
 
     from sklearn.model_selection import StratifiedKFold
     cv = StratifiedKFold(n_splits=CV_FOLDS, shuffle=True, random_state=RANDOM_STATE)
@@ -115,10 +173,10 @@ def elbow_method_analysis(X_train: pd.DataFrame, y_train: pd.Series) -> dict:
         # Mostrar progresso para cada K
         print(f"  K={k:2d}: Treino={train_score:.4f}, CV_recall={cv_means['recall'][-1]:.4f}, CV_f1={cv_means['f1'][-1]:.4f}")
 
-    # Escolha do K: por recall médio (mudar 'recall' para 'f1' ou 'roc_auc' se preferir)
-    metric_to_optimize = 'f1'
+    # Escolha do K: por RECALL (para otimizar detecção de doentes cardíacos)
+    metric_to_optimize = 'recall'
     best_k_idx = int(np.argmax(cv_means[metric_to_optimize]))
-    best_k = best_k_idx + 1
+    best_k = list(k_values)[best_k_idx]
     best_cv_score = cv_means[metric_to_optimize][best_k_idx]
 
     print(f"\n✓ Melhor K encontrado (por {metric_to_optimize}): {best_k} com CV {metric_to_optimize}: {best_cv_score:.4f}")
@@ -167,7 +225,8 @@ def plot_elbow_curve(results: dict) -> None:
     )
     
     # Destaque K ótimo
-    best_cv = cv_means[best_k - 1]
+    best_k_idx = list(k_values).index(best_k)
+    best_cv = cv_means[best_k_idx]
     ax.plot(best_k, best_cv, 'r*', markersize=20, label=f'Melhor K={best_k}')
     ax.axvline(x=best_k, color='red', linestyle='--', alpha=0.5)
     
@@ -177,7 +236,7 @@ def plot_elbow_curve(results: dict) -> None:
          fontsize=14, fontweight='bold')
     ax.legend(fontsize=10)
     ax.grid(True, alpha=0.3)
-    ax.set_xticks(range(1, K_MAX + 1, 2))
+    ax.set_xticks(k_values)
     
     plt.tight_layout()
     plt.savefig(OUTPUT_DIR / "knn_elbow_curve.png", dpi=300, bbox_inches='tight')
@@ -316,13 +375,13 @@ K-NN CLASSIFICATION MODEL - HEART DISEASE PREDICTION
 ================================================================================
 
 CONFIGURAÇÃO:
-- Dataset de Treino: CVD_train_85pct.csv ({len(results['X_train'])} registos)
+- Dataset de Treino: {REDUCED_TRAIN_FILE} ({len(results['X_train'])} registos)
 - Dataset de Teste: CVD_test_15pct.csv ({len(results['X_test'])} registos)
 - Target: Heart_Disease (Classificação Binária)
 - Método: K-Nearest Neighbors com Método do Cotovelo
 
 MÉTODO DO COTOVELO:
-- Testados valores de K: 1 a 30
+- Testados valores de K IMPARES: 3, 5, 7, 9, 11, 13, 15
 - Validação Cruzada: {CV_FOLDS} folds
     - Melhor K encontrado: {best_k}
     - Métrica usada para selecionar K: {results.get('optimized_metric', 'accuracy').upper()}
@@ -384,8 +443,11 @@ def save_detailed_results(results: dict, evaluation: dict) -> None:
 def main():
     """Executar análise completa."""
     
-    print_section("ANÁLISE K-NN COM MÉTODO DO COTOVELO")
+    print_section("ANÁLISE K-NN COM MÉTODO DO COTOVELO (DATASET REDUZIDO)")
     print("Prevendo Heart Disease usando K-Nearest Neighbors")
+    
+    # 0. Gerar dataset reduzido (se ainda não existir)
+    generate_reduced_dataset()
     
     # 1. Carregar dados
     X_train, y_train, X_test, y_test = load_data()
@@ -397,7 +459,6 @@ def main():
     results['y_train'] = y_train
     results['y_test'] = y_test
     # best_cv_score já é definido na função (para a métrica optimizada)
-    results['best_cv_score'] = results.get('best_cv_score', results['cv_scores'][results['best_k'] - 1])
     
     # 3. Plotar curva do cotovelo
     plot_elbow_curve(results)

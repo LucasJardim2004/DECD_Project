@@ -24,7 +24,7 @@ from joblib import dump
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 
-from transformadores import BINARY_COLS, CONTINUOUS_COLS, ORDINAL_ORDER
+from Project_Scripts.Parte1.transformadores import BINARY_COLS, CONTINUOUS_COLS, ORDINAL_ORDER
 
 
 REPORT_FEATURES = [

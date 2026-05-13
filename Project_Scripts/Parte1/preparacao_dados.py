@@ -15,7 +15,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from transformadores import (
+from Project_Scripts.Parte1.transformadores import (
     BINARY_COLS,
     CONTINUOUS_COLS,
     ORDINAL_ORDER,
