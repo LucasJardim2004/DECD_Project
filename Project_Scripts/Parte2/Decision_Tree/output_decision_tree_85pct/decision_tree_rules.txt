@@ -1,0 +1,370 @@
+|--- Age_Category <= 1.50
+|   |--- General_Health <= 1.50
+|   |   |--- Age_Category <= 0.50
+|   |   |   |--- Arthritis <= 0.50
+|   |   |   |   |--- FriedPotato_Consumption <= 5.50
+|   |   |   |   |   |--- BMI <= 42.94
+|   |   |   |   |   |   |--- Height_(cm) <= 162.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 6
+|   |   |   |   |   |   |--- Height_(cm) >  162.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 11
+|   |   |   |   |   |--- BMI >  42.94
+|   |   |   |   |   |   |--- weights: [194.00, 0.00] class: 0
+|   |   |   |   |--- FriedPotato_Consumption >  5.50
+|   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |--- BMI <= 42.00
+|   |   |   |   |   |   |   |--- truncated branch of depth 9
+|   |   |   |   |   |   |--- BMI >  42.00
+|   |   |   |   |   |   |   |--- truncated branch of depth 3
+|   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |--- Checkup <= 3.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 4
+|   |   |   |   |   |   |--- Checkup >  3.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 8
+|   |   |   |--- Arthritis >  0.50
+|   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |--- BMI <= 44.92
+|   |   |   |   |   |   |--- Skin_Cancer <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 12
+|   |   |   |   |   |   |--- Skin_Cancer >  0.50
+|   |   |   |   |   |   |   |--- weights: [20.00, 7.00] class: 0
+|   |   |   |   |   |--- BMI >  44.92
+|   |   |   |   |   |   |--- weights: [109.00, 0.00] class: 0
+|   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |--- BMI <= 25.20
+|   |   |   |   |   |   |--- weights: [9.00, 11.00] class: 1
+|   |   |   |   |   |--- BMI >  25.20
+|   |   |   |   |   |   |--- Sex <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 3
+|   |   |   |   |   |   |--- Sex >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |--- Age_Category >  0.50
+|   |   |   |--- General_Health <= 0.50
+|   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |--- BMI <= 54.86
+|   |   |   |   |   |   |   |--- truncated branch of depth 12
+|   |   |   |   |   |   |--- BMI >  54.86
+|   |   |   |   |   |   |   |--- weights: [30.00, 0.00] class: 0
+|   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |--- Arthritis <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 10
+|   |   |   |   |   |   |--- Arthritis >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 12
+|   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |--- Sex <= 0.50
+|   |   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 5
+|   |   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 9
+|   |   |   |   |   |--- Sex >  0.50
+|   |   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 6
+|   |   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 7
+|   |   |   |--- General_Health >  0.50
+|   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |--- Sex <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 15
+|   |   |   |   |   |   |--- Sex >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 14
+|   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |--- Checkup <= 3.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 11
+|   |   |   |   |   |   |--- Checkup >  3.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 14
+|   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |--- Arthritis <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 10
+|   |   |   |   |   |   |--- Arthritis >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 11
+|   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |--- Sex <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 11
+|   |   |   |   |   |   |--- Sex >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 14
+|   |--- General_Health >  1.50
+|   |   |--- Age_Category <= 0.50
+|   |   |   |--- Arthritis <= 0.50
+|   |   |   |   |--- General_Health <= 2.50
+|   |   |   |   |   |--- Sex <= 0.50
+|   |   |   |   |   |   |--- Alcohol_Consumption <= 14.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 13
+|   |   |   |   |   |   |--- Alcohol_Consumption >  14.50
+|   |   |   |   |   |   |   |--- weights: [557.00, 0.00] class: 0
+|   |   |   |   |   |--- Sex >  0.50
+|   |   |   |   |   |   |--- FriedPotato_Consumption <= 23.00
+|   |   |   |   |   |   |   |--- truncated branch of depth 20
+|   |   |   |   |   |   |--- FriedPotato_Consumption >  23.00
+|   |   |   |   |   |   |   |--- truncated branch of depth 6
+|   |   |   |   |--- General_Health >  2.50
+|   |   |   |   |   |--- Depression <= 0.50
+|   |   |   |   |   |   |--- Fruit_Consumption <= 87.00
+|   |   |   |   |   |   |   |--- truncated branch of depth 26
+|   |   |   |   |   |   |--- Fruit_Consumption >  87.00
+|   |   |   |   |   |   |   |--- truncated branch of depth 11
+|   |   |   |   |   |--- Depression >  0.50
+|   |   |   |   |   |   |--- FriedPotato_Consumption <= 15.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 14
+|   |   |   |   |   |   |--- FriedPotato_Consumption >  15.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 9
+|   |   |   |--- Arthritis >  0.50
+|   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |--- Height_(cm) <= 163.50
+|   |   |   |   |   |   |--- Checkup <= 2.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |   |--- Checkup >  2.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 11
+|   |   |   |   |   |--- Height_(cm) >  163.50
+|   |   |   |   |   |   |--- BMI <= 23.39
+|   |   |   |   |   |   |   |--- weights: [243.00, 0.00] class: 0
+|   |   |   |   |   |   |--- BMI >  23.39
+|   |   |   |   |   |   |   |--- truncated branch of depth 10
+|   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |--- Skin_Cancer <= 0.50
+|   |   |   |   |   |   |--- Alcohol_Consumption <= 5.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 13
+|   |   |   |   |   |   |--- Alcohol_Consumption >  5.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 6
+|   |   |   |   |   |--- Skin_Cancer >  0.50
+|   |   |   |   |   |   |--- weights: [28.00, 5.00] class: 0
+|   |   |--- Age_Category >  0.50
+|   |   |   |--- General_Health <= 2.50
+|   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |--- Sex <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 25
+|   |   |   |   |   |   |--- Sex >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 18
+|   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |--- Arthritis <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 22
+|   |   |   |   |   |   |--- Arthritis >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 18
+|   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |--- Sex <= 0.50
+|   |   |   |   |   |   |--- Arthritis <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 14
+|   |   |   |   |   |   |--- Arthritis >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 12
+|   |   |   |   |   |--- Sex >  0.50
+|   |   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 14
+|   |   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 14
+|   |   |   |--- General_Health >  2.50
+|   |   |   |   |--- Sex <= 0.50
+|   |   |   |   |   |--- Arthritis <= 0.50
+|   |   |   |   |   |   |--- General_Health <= 3.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 27
+|   |   |   |   |   |   |--- General_Health >  3.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 14
+|   |   |   |   |   |--- Arthritis >  0.50
+|   |   |   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 20
+|   |   |   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 7
+|   |   |   |   |--- Sex >  0.50
+|   |   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |   |--- General_Health <= 3.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 24
+|   |   |   |   |   |   |--- General_Health >  3.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 24
+|   |   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |   |--- Other_Cancer <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 12
+|   |   |   |   |   |   |--- Other_Cancer >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 3
+|--- Age_Category >  1.50
+|   |--- General_Health <= 1.50
+|   |   |--- Sex <= 0.50
+|   |   |   |--- General_Health <= 0.50
+|   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |--- Exercise <= 0.50
+|   |   |   |   |   |   |--- Fruit_Consumption <= 85.00
+|   |   |   |   |   |   |   |--- truncated branch of depth 10
+|   |   |   |   |   |   |--- Fruit_Consumption >  85.00
+|   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |--- Exercise >  0.50
+|   |   |   |   |   |   |--- BMI <= 17.28
+|   |   |   |   |   |   |   |--- weights: [19.00, 1.00] class: 0
+|   |   |   |   |   |   |--- BMI >  17.28
+|   |   |   |   |   |   |   |--- truncated branch of depth 8
+|   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |--- BMI <= 45.09
+|   |   |   |   |   |   |   |--- truncated branch of depth 10
+|   |   |   |   |   |   |--- BMI >  45.09
+|   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |--- Height_(cm) <= 158.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 5
+|   |   |   |   |   |   |--- Height_(cm) >  158.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 8
+|   |   |   |--- General_Health >  0.50
+|   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |--- Checkup <= 1.50
+|   |   |   |   |   |   |   |--- weights: [26.00, 0.00] class: 0
+|   |   |   |   |   |   |--- Checkup >  1.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 15
+|   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |--- Alcohol_Consumption <= 3.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 16
+|   |   |   |   |   |   |--- Alcohol_Consumption >  3.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 8
+|   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |--- Skin_Cancer <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 12
+|   |   |   |   |   |   |--- Skin_Cancer >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 7
+|   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |--- BMI <= 38.84
+|   |   |   |   |   |   |   |--- truncated branch of depth 11
+|   |   |   |   |   |   |--- BMI >  38.84
+|   |   |   |   |   |   |   |--- truncated branch of depth 5
+|   |   |--- Sex >  0.50
+|   |   |   |--- General_Health <= 0.50
+|   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |--- Arthritis <= 0.50
+|   |   |   |   |   |   |--- BMI <= 21.13
+|   |   |   |   |   |   |   |--- truncated branch of depth 3
+|   |   |   |   |   |   |--- BMI >  21.13
+|   |   |   |   |   |   |   |--- truncated branch of depth 10
+|   |   |   |   |   |--- Arthritis >  0.50
+|   |   |   |   |   |   |--- BMI <= 38.72
+|   |   |   |   |   |   |   |--- truncated branch of depth 9
+|   |   |   |   |   |   |--- BMI >  38.72
+|   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |--- Skin_Cancer <= 0.50
+|   |   |   |   |   |   |--- FriedPotato_Consumption <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 3
+|   |   |   |   |   |   |--- FriedPotato_Consumption >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 11
+|   |   |   |   |   |--- Skin_Cancer >  0.50
+|   |   |   |   |   |   |--- FriedPotato_Consumption <= 7.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 4
+|   |   |   |   |   |   |--- FriedPotato_Consumption >  7.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 3
+|   |   |   |--- General_Health >  0.50
+|   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |--- Arthritis <= 0.50
+|   |   |   |   |   |   |--- Checkup <= 1.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |   |--- Checkup >  1.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 13
+|   |   |   |   |   |--- Arthritis >  0.50
+|   |   |   |   |   |   |--- Green_Vegetables_Consumption <= 30.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 20
+|   |   |   |   |   |   |--- Green_Vegetables_Consumption >  30.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |--- FriedPotato_Consumption <= 15.50
+|   |   |   |   |   |   |--- Skin_Cancer <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 14
+|   |   |   |   |   |   |--- Skin_Cancer >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 8
+|   |   |   |   |   |--- FriedPotato_Consumption >  15.50
+|   |   |   |   |   |   |--- Alcohol_Consumption <= 1.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 6
+|   |   |   |   |   |   |--- Alcohol_Consumption >  1.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 3
+|   |--- General_Health >  1.50
+|   |   |--- Sex <= 0.50
+|   |   |   |--- General_Health <= 2.50
+|   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |--- Arthritis <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 25
+|   |   |   |   |   |   |--- Arthritis >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 20
+|   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |--- Alcohol_Consumption <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 22
+|   |   |   |   |   |   |--- Alcohol_Consumption >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 20
+|   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |--- FriedPotato_Consumption <= 13.50
+|   |   |   |   |   |   |--- Arthritis <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 12
+|   |   |   |   |   |   |--- Arthritis >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 16
+|   |   |   |   |   |--- FriedPotato_Consumption >  13.50
+|   |   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 4
+|   |   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 4
+|   |   |   |--- General_Health >  2.50
+|   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |--- General_Health <= 3.50
+|   |   |   |   |   |   |--- Arthritis <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 21
+|   |   |   |   |   |   |--- Arthritis >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 24
+|   |   |   |   |   |--- General_Health >  3.50
+|   |   |   |   |   |   |--- Height_(cm) <= 158.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 15
+|   |   |   |   |   |   |--- Height_(cm) >  158.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 22
+|   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |--- BMI <= 34.85
+|   |   |   |   |   |   |   |--- truncated branch of depth 17
+|   |   |   |   |   |   |--- BMI >  34.85
+|   |   |   |   |   |   |   |--- truncated branch of depth 5
+|   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |--- Arthritis <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 7
+|   |   |   |   |   |   |--- Arthritis >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 8
+|   |   |--- Sex >  0.50
+|   |   |   |--- General_Health <= 2.50
+|   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |--- Checkup <= 2.50
+|   |   |   |   |   |   |--- BMI <= 20.69
+|   |   |   |   |   |   |   |--- weights: [30.00, 0.00] class: 0
+|   |   |   |   |   |   |--- BMI >  20.69
+|   |   |   |   |   |   |   |--- truncated branch of depth 7
+|   |   |   |   |   |--- Checkup >  2.50
+|   |   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 19
+|   |   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 21
+|   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |--- Alcohol_Consumption <= 24.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 14
+|   |   |   |   |   |   |--- Alcohol_Consumption >  24.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 3
+|   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |--- Alcohol_Consumption <= 2.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 17
+|   |   |   |   |   |   |--- Alcohol_Consumption >  2.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 8
+|   |   |   |--- General_Health >  2.50
+|   |   |   |   |--- General_Health <= 3.50
+|   |   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 21
+|   |   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 22
+|   |   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 11
+|   |   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 12
+|   |   |   |   |--- General_Health >  3.50
+|   |   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |   |--- Checkup <= 3.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 10
+|   |   |   |   |   |   |--- Checkup >  3.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 18
+|   |   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |   |--- Arthritis <= 0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 8
+|   |   |   |   |   |   |--- Arthritis >  0.50
+|   |   |   |   |   |   |   |--- truncated branch of depth 5
