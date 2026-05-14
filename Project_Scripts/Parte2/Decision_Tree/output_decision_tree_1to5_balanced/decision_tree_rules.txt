@@ -1,0 +1,190 @@
+|--- Age_Category <= 1.50
+|   |--- General_Health <= 1.50
+|   |   |--- Age_Category <= 0.50
+|   |   |   |--- Arthritis <= 0.50
+|   |   |   |   |--- FriedPotato_Consumption <= 5.50
+|   |   |   |   |   |--- BMI <= 42.98
+|   |   |   |   |   |   |--- weights: [373.75, 212.50] class: 0
+|   |   |   |   |   |--- BMI >  42.98
+|   |   |   |   |   |   |--- weights: [42.50, 0.00] class: 0
+|   |   |   |   |--- FriedPotato_Consumption >  5.50
+|   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |--- weights: [266.25, 25.00] class: 0
+|   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |--- weights: [203.12, 67.50] class: 0
+|   |   |   |--- Arthritis >  0.50
+|   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |--- BMI <= 44.93
+|   |   |   |   |   |   |--- weights: [199.38, 162.50] class: 0
+|   |   |   |   |   |--- BMI >  44.93
+|   |   |   |   |   |   |--- weights: [21.25, 0.00] class: 0
+|   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |--- BMI <= 24.76
+|   |   |   |   |   |   |--- weights: [1.87, 27.50] class: 1
+|   |   |   |   |   |--- BMI >  24.76
+|   |   |   |   |   |   |--- weights: [25.62, 35.00] class: 1
+|   |   |--- Age_Category >  0.50
+|   |   |   |--- General_Health <= 0.50
+|   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |--- weights: [167.50, 307.50] class: 1
+|   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |--- weights: [276.25, 1137.50] class: 1
+|   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |--- Height_(cm) <= 169.00
+|   |   |   |   |   |   |--- weights: [125.00, 557.50] class: 1
+|   |   |   |   |   |--- Height_(cm) >  169.00
+|   |   |   |   |   |   |--- weights: [110.62, 830.00] class: 1
+|   |   |   |--- General_Health >  0.50
+|   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |--- weights: [750.00, 812.50] class: 1
+|   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |--- weights: [936.88, 1847.50] class: 1
+|   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |--- weights: [335.62, 702.50] class: 1
+|   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |--- weights: [360.00, 1237.50] class: 1
+|   |--- General_Health >  1.50
+|   |   |--- Age_Category <= 0.50
+|   |   |   |--- Arthritis <= 0.50
+|   |   |   |   |--- General_Health <= 2.50
+|   |   |   |   |   |--- Sex <= 0.50
+|   |   |   |   |   |   |--- weights: [1600.00, 100.00] class: 0
+|   |   |   |   |   |--- Sex >  0.50
+|   |   |   |   |   |   |--- weights: [1823.12, 227.50] class: 0
+|   |   |   |   |--- General_Health >  2.50
+|   |   |   |   |   |--- Depression <= 0.50
+|   |   |   |   |   |   |--- weights: [6778.12, 260.00] class: 0
+|   |   |   |   |   |--- Depression >  0.50
+|   |   |   |   |   |   |--- weights: [1473.75, 147.50] class: 0
+|   |   |   |--- Arthritis >  0.50
+|   |   |   |   |--- Other_Cancer <= 0.50
+|   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |--- weights: [388.75, 62.50] class: 0
+|   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |--- weights: [350.00, 110.00] class: 0
+|   |   |   |   |--- Other_Cancer >  0.50
+|   |   |   |   |   |--- Checkup <= 2.50
+|   |   |   |   |   |   |--- weights: [6.88, 0.00] class: 0
+|   |   |   |   |   |--- Checkup >  2.50
+|   |   |   |   |   |   |--- weights: [21.25, 27.50] class: 1
+|   |   |--- Age_Category >  0.50
+|   |   |   |--- General_Health <= 2.50
+|   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |--- weights: [3089.38, 1285.00] class: 0
+|   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |--- weights: [2535.00, 2040.00] class: 0
+|   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |--- Sex <= 0.50
+|   |   |   |   |   |   |--- weights: [606.25, 510.00] class: 0
+|   |   |   |   |   |--- Sex >  0.50
+|   |   |   |   |   |   |--- weights: [548.75, 1057.50] class: 1
+|   |   |   |--- General_Health >  2.50
+|   |   |   |   |--- Sex <= 0.50
+|   |   |   |   |   |--- Arthritis <= 0.50
+|   |   |   |   |   |   |--- weights: [5122.50, 567.50] class: 0
+|   |   |   |   |   |--- Arthritis >  0.50
+|   |   |   |   |   |   |--- weights: [1538.75, 450.00] class: 0
+|   |   |   |   |--- Sex >  0.50
+|   |   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |   |--- weights: [5720.62, 1865.00] class: 0
+|   |   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |   |--- weights: [361.25, 417.50] class: 1
+|--- Age_Category >  1.50
+|   |--- General_Health <= 2.50
+|   |   |--- General_Health <= 1.50
+|   |   |   |--- Sex <= 0.50
+|   |   |   |   |--- General_Health <= 0.50
+|   |   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |   |--- weights: [227.50, 1162.50] class: 1
+|   |   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |   |--- weights: [110.62, 915.00] class: 1
+|   |   |   |   |--- General_Health >  0.50
+|   |   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |   |--- weights: [793.12, 2402.50] class: 1
+|   |   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |   |--- weights: [367.50, 1685.00] class: 1
+|   |   |   |--- Sex >  0.50
+|   |   |   |   |--- General_Health <= 0.50
+|   |   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |   |--- weights: [151.88, 1317.50] class: 1
+|   |   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |   |--- weights: [88.12, 1255.00] class: 1
+|   |   |   |   |--- General_Health >  0.50
+|   |   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |   |--- weights: [547.50, 3017.50] class: 1
+|   |   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |   |--- weights: [297.50, 2432.50] class: 1
+|   |   |--- General_Health >  1.50
+|   |   |   |--- Sex <= 0.50
+|   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |--- weights: [1486.88, 1770.00] class: 1
+|   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |--- weights: [1010.62, 1692.50] class: 1
+|   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |--- weights: [450.00, 792.50] class: 1
+|   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |--- weights: [240.00, 620.00] class: 1
+|   |   |   |--- Sex >  0.50
+|   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |--- Checkup <= 2.50
+|   |   |   |   |   |   |--- weights: [98.75, 100.00] class: 1
+|   |   |   |   |   |--- Checkup >  2.50
+|   |   |   |   |   |   |--- weights: [1690.62, 5295.00] class: 1
+|   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |--- weights: [276.25, 995.00] class: 1
+|   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |--- weights: [318.75, 1722.50] class: 1
+|   |--- General_Health >  2.50
+|   |   |--- Sex <= 0.50
+|   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |--- General_Health <= 3.50
+|   |   |   |   |   |--- Arthritis <= 0.50
+|   |   |   |   |   |   |--- weights: [1653.12, 800.00] class: 0
+|   |   |   |   |   |--- Arthritis >  0.50
+|   |   |   |   |   |   |--- weights: [1638.12, 1230.00] class: 0
+|   |   |   |   |--- General_Health >  3.50
+|   |   |   |   |   |--- Height_(cm) <= 158.50
+|   |   |   |   |   |   |--- weights: [339.38, 142.50] class: 0
+|   |   |   |   |   |--- Height_(cm) >  158.50
+|   |   |   |   |   |   |--- weights: [966.25, 227.50] class: 0
+|   |   |   |--- Diabetes >  0.50
+|   |   |   |   |--- Fruit_Consumption <= 35.00
+|   |   |   |   |   |--- Exercise <= 0.50
+|   |   |   |   |   |   |--- weights: [87.50, 205.00] class: 1
+|   |   |   |   |   |--- Exercise >  0.50
+|   |   |   |   |   |   |--- weights: [229.38, 270.00] class: 1
+|   |   |   |   |--- Fruit_Consumption >  35.00
+|   |   |   |   |   |--- BMI <= 38.99
+|   |   |   |   |   |   |--- weights: [134.38, 127.50] class: 0
+|   |   |   |   |   |--- BMI >  38.99
+|   |   |   |   |   |   |--- weights: [10.00, 0.00] class: 0
+|   |   |--- Sex >  0.50
+|   |   |   |--- General_Health <= 3.50
+|   |   |   |   |--- Diabetes <= 0.50
+|   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |--- weights: [1188.12, 1607.50] class: 1
+|   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |--- weights: [1053.12, 2042.50] class: 1
+|   |   |   |   |--- Diabetes >  0.50
+|   |   |   |   |   |--- Smoking_History <= 0.50
+|   |   |   |   |   |   |--- weights: [184.38, 430.00] class: 1
+|   |   |   |   |   |--- Smoking_History >  0.50
+|   |   |   |   |   |   |--- weights: [175.00, 612.50] class: 1
+|   |   |   |--- General_Health >  3.50
+|   |   |   |   |--- Checkup <= 3.50
+|   |   |   |   |   |--- Exercise <= 0.50
+|   |   |   |   |   |   |--- weights: [21.88, 27.50] class: 1
+|   |   |   |   |   |--- Exercise >  0.50
+|   |   |   |   |   |   |--- weights: [178.12, 70.00] class: 0
+|   |   |   |   |--- Checkup >  3.50
+|   |   |   |   |   |--- Alcohol_Consumption <= 8.50
+|   |   |   |   |   |   |--- weights: [583.12, 785.00] class: 1
+|   |   |   |   |   |--- Alcohol_Consumption >  8.50
+|   |   |   |   |   |   |--- weights: [305.00, 220.00] class: 0
