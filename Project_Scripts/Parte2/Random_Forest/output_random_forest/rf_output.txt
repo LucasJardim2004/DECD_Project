@@ -1,0 +1,68 @@
+====================================================================================================
+                                       CARREGAMENTO DOS DADOS                                       
+====================================================================================================
+Ficheiro de treino: CVD_train_1to5.csv
+Ficheiro de teste:  CVD_test_15pct.csv
+Coluna alvo:        Heart_Disease
+Treino: 106125 registos, 17 variáveis
+Teste:  46329 registos, 17 variáveis
+
+Distribuição da variável alvo em treino:
+  - Sem doença cardíaca (0): 84900 (80.00%)
+  - Com doença cardíaca (1): 21225 (20.00%)
+
+Distribuição da variável alvo em teste:
+  - Sem doença cardíaca (0): 42583 (91.91%)
+  - Com doença cardíaca (1): 3746 (8.09%)
+
+====================================================================================================
+                                     SELEÇÃO DE HIPERPARÂMETROS                                     
+====================================================================================================
+✓ Ficheiros guardados: /Users/lucasjardim/Desktop/Pastas progamação/DECD_Proj/Project_Scripts/Parte2/Random_Forest/output_random_forest/rf_validation_candidates.csv
+✓ Ficheiros guardados: /Users/lucasjardim/Desktop/Pastas progamação/DECD_Proj/Project_Scripts/Parte2/Random_Forest/output_random_forest/rf_threshold_candidates.csv
+✓ Limiar selecionado: 0.3800
+Melhor configuração encontrada:
+  - n_estimators: 200
+  - max_depth: 8
+  - min_samples_split: 20
+  - min_samples_leaf: 10
+  - class_weight: balanced_subsample
+
+====================================================================================================
+                                       TREINO DO MODELO FINAL                                       
+====================================================================================================
+Métricas no treino:
+  - accuracy: 0.661164
+  - precision: 0.359842
+  - recall: 0.891119
+  - f1: 0.512665
+  - f2: 0.687972
+
+Métricas no teste:
+  - accuracy: 0.622051
+  - precision: 0.163735
+  - recall: 0.894554
+  - f1: 0.276805
+  - f2: 0.472638
+✓ Modelo guardado: /Users/lucasjardim/Desktop/Pastas progamação/DECD_Proj/Project_Scripts/Parte2/Random_Forest/output_random_forest/random_forest_model.joblib
+✓ Ficheiro guardado: /Users/lucasjardim/Desktop/Pastas progamação/DECD_Proj/Project_Scripts/Parte2/Random_Forest/output_random_forest/random_forest_feature_importances.csv
+/Users/lucasjardim/Desktop/Pastas progamação/DECD_Proj/Project_Scripts/Parte2/Random_Forest/treinar_modelo_random_forest.py:240: FutureWarning: 
+
+Passing `palette` without assigning `hue` is deprecated and will be removed in v0.14.0. Assign the `y` variable to `hue` and set `legend=False` for the same effect.
+
+  sns.barplot(x=top_features.values, y=top_features.index, ax=ax, palette="viridis")
+✓ Gráfico guardado: /Users/lucasjardim/Desktop/Pastas progamação/DECD_Proj/Project_Scripts/Parte2/Random_Forest/output_random_forest/random_forest_feature_importances_top15.png
+
+====================================================================================================
+                                GERAÇÃO DE VISUALIZAÇÕES E RELATÓRIO                                
+====================================================================================================
+✓ Matriz de confusão de treino guardada: /Users/lucasjardim/Desktop/Pastas progamação/DECD_Proj/Project_Scripts/Parte2/Random_Forest/output_random_forest/random_forest_confusion_matrix_train.png
+✓ Matriz de confusão de teste guardada: /Users/lucasjardim/Desktop/Pastas progamação/DECD_Proj/Project_Scripts/Parte2/Random_Forest/output_random_forest/random_forest_confusion_matrix_test.png
+✓ Curva Precision-Recall guardada: /Users/lucasjardim/Desktop/Pastas progamação/DECD_Proj/Project_Scripts/Parte2/Random_Forest/output_random_forest/random_forest_precision_recall_curve_test.png
+✓ Ficheiro guardado: /Users/lucasjardim/Desktop/Pastas progamação/DECD_Proj/Project_Scripts/Parte2/Random_Forest/output_random_forest/random_forest_metrics_summary.csv
+✓ Relatório guardado: /Users/lucasjardim/Desktop/Pastas progamação/DECD_Proj/Project_Scripts/Parte2/Random_Forest/output_random_forest/random_forest_report.md
+
+====================================================================================================
+                                             CONCLUÍDO                                              
+====================================================================================================
+Todos os outputs foram guardados em: /Users/lucasjardim/Desktop/Pastas progamação/DECD_Proj/Project_Scripts/Parte2/Random_Forest/output_random_forest

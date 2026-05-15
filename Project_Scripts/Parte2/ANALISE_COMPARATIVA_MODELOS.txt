@@ -1,0 +1,266 @@
+ANALISE COMPARATIVA COMPLETA DOS MODELOS - PREVISAO DE HEART_DISEASE
+====================================================================
+
+Objetivo
+--------
+Comparar os resultados dos 4 modelos implementados no projeto (Decision Tree, Random Forest,
+K-NN e Naive Bayes), discriminando as variantes de datasets utilizadas em cada modelo e
+avaliando a aptidao de cada abordagem para contexto de analise medica, com foco em previsao
+de Heart_Disease.
+
+Fontes de resultado utilizadas
+------------------------------
+Decision Tree:
+- Project_Scripts/Parte2/Decision_Tree/output_decision_tree_85pct/decision_tree_metrics_summary.csv
+- Project_Scripts/Parte2/Decision_Tree/output_decision_tree_1to5/decision_tree_metrics_summary.csv
+- Project_Scripts/Parte2/Decision_Tree/output_decision_tree_1to5_balanced/decision_tree_metrics_summary.csv
+- Project_Scripts/Parte2/Decision_Tree/output_decision_tree_85pct/decision_tree_report.md
+- Project_Scripts/Parte2/Decision_Tree/output_decision_tree_1to5/decision_tree_report.md
+- Project_Scripts/Parte2/Decision_Tree/output_decision_tree_1to5_balanced/decision_tree_report.md
+- Project_Scripts/Parte2/Decision_Tree/output_decision_tree_1to5_balanced/decision_tree_best_threshold.txt
+
+Random Forest:
+- Project_Scripts/Parte2/Random_Forest/output_random_forest/random_forest_metrics_summary.csv
+- Project_Scripts/Parte2/Random_Forest/output_random_forest/random_forest_report.md
+- Project_Scripts/Parte2/Random_Forest/output_random_forest/rf_best_threshold.txt
+
+K-NN:
+- Project_Scripts/Parte2/K-NN/output_knn_f1/knn_results_summary.txt
+- Project_Scripts/Parte2/K-NN/output_knn_recall/knn_results_summary.txt
+- Project_Scripts/Parte2/K-NN/output_knn_reduced_425pct/knn_results_summary.txt
+- Project_Scripts/Parte2/K-NN/output_knn_reduced_1to2/knn_results_summary.txt
+- Project_Scripts/Parte2/K-NN/output_knn_reduced_1to3/knn_results_summary.txt
+
+Naive Bayes:
+- Project_Scripts/Parte2/Naive_Bayes/Analise_100/output_naive_bayes_100/nb_results_summary.txt
+- Project_Scripts/Parte2/Naive_Bayes/Analise_Reduzida/output_naive_bayes/nb_results_summary.txt
+
+
+1) DESCRICAO DOS MODELOS
+========================
+
+1.1) Decision Tree
+- Modelo supervisionado baseado numa unica arvore de decisao.
+- Usa cortes sucessivos nas variaveis para separar classes.
+- Vantagens: interpretabilidade alta (regras legiveis), treino rapido.
+- Risco principal: se os primeiros cortes forem pouco favoraveis a classe minoritaria,
+  o modelo tende a manter baixo recall para doentes.
+
+1.2) Random Forest
+- Conjunto (ensemble) de multiplas arvores de decisao.
+- Cada arvore treina com variacao nos dados e subconjunto de atributos.
+- Vantagens: maior robustez, menor variancia, melhor generalizacao.
+- Nesta implementacao: class_weight='balanced_subsample', adequado a desbalanceamento,
+  pois reequilibra classes dentro das amostras bootstrap de cada arvore.
+
+1.3) K-NN
+- Classificador por vizinhos mais proximos (distancia entre amostras).
+- Nao aprende fronteira explicita; decide pela vizinhanca local.
+- Sensivel a desbalanceamento e ao valor de K.
+- Beneficia fortemente de treino mais equilibrado.
+
+1.4) Naive Bayes (GaussianNB)
+- Modelo probabilistico com hipotese de independencia condicional entre atributos.
+- Muito rapido e estavel, com boa performance base em muitos cenarios.
+- Pode perder desempenho quando as relacoes entre variaveis sao complexas,
+  mas costuma manter bom recall quando configurado com dataset mais equilibrado.
+
+
+2) RESULTADOS CONSOLIDADOS POR MODELO E DATASET
+================================================
+
+Legenda:
+- Classe positiva = Com Doenca (Heart_Disease = 1)
+- Prioridade medica tipica = Recall alto (evitar falsos negativos)
+
+2.1) Decision Tree
+------------------
+A) Treino 85% desbalanceado | Teste 15% original
+- Accuracy: 0.9138
+- Precision: 0.3711
+- Recall: 0.0945
+- F1: 0.1506
+- Threshold: padrao (0.5)
+- Leitura: alta accuracy, mas recall muito baixo para doentes (na pratica clinica, fraco).
+
+B) Treino 1:5 | Teste 15% original
+- Accuracy: 0.8970
+- Precision: 0.3427
+- Recall: 0.2987
+- F1: 0.3192
+- Threshold: padrao (0.5)
+- Leitura: melhoria clara de recall face ao dataset 85% puro, mas ainda moderado.
+
+C) Treino 1:5 com estrategia balanced + threshold otimizado | Teste 15% original
+- Accuracy: 0.6194
+- Precision: 0.1614
+- Recall: 0.8836
+- F1: 0.2729
+- F2: 0.4663
+- Threshold: 0.4000
+- Leitura: recall muito alto; custo em precision/accuracy. Melhor para triagem (screening).
+
+
+2.2) Random Forest
+------------------
+A) Treino 1:5 | Teste 15% original (class_weight='balanced_subsample')
+- Accuracy: 0.6221
+- Precision: 0.1637
+- Recall: 0.8946
+- F1: 0.2768
+- F2: 0.4726
+- Threshold: 0.3800
+- Leitura: melhor recall global entre os modelos comparados, com ligeira vantagem de F2
+  sobre Decision Tree balanceada. Muito forte para reduzir falsos negativos.
+
+
+2.3) K-NN
+---------
+A) 85% split (otimizacao F1), K=1 | Teste 15%
+- Accuracy: 0.8704
+- Precision: 0.2009
+- Recall: 0.2007
+- F1: 0.2008
+- ROC-AUC: 0.5651
+
+B) 85% split (otimizacao Recall), K=1 | Teste 15%
+- Accuracy: 0.8704
+- Precision: 0.2009
+- Recall: 0.2007
+- F1: 0.2008
+- ROC-AUC: 0.5651
+
+C) Reduced 4.25%, K=3 | Teste 15%
+- Accuracy: 0.9019
+- Precision: 0.2727
+- Recall: 0.1257
+- F1: 0.1720
+- ROC-AUC: 0.6375
+
+D) Balanced 1:2, K=11 | Teste 15%
+- Accuracy: 0.8160
+- Precision: 0.2331
+- Recall: 0.5540
+- F1: 0.3281
+- ROC-AUC: 0.7909
+
+E) Balanced 1:3, K=3 | Teste 15%
+- Accuracy: 0.8272
+- Precision: 0.2138
+- Recall: 0.4225
+- F1: 0.2840
+- ROC-AUC: 0.7171
+
+Leitura geral K-NN:
+- Sem balanceamento: recall baixo.
+- Com 1:2: melhor compromisso do K-NN (recall 0.554 e ROC-AUC 0.7909).
+
+
+2.4) Naive Bayes
+----------------
+A) Analise_100 (85% split) | Teste 15%
+- Accuracy: 0.8298
+- Precision: 0.2316
+- Recall: 0.4742
+- F1: 0.3112
+- ROC-AUC: 0.7865
+
+B) Analise_Reduzida (aprox. 1:3) | Teste 15%
+- Accuracy: 0.7701
+- Precision: 0.2034
+- Recall: 0.6297
+- F1: 0.3075
+- ROC-AUC: 0.7864
+
+Leitura geral Naive Bayes:
+- Manteve ROC-AUC estavel (~0.786) entre cenarios.
+- Na versao reduzida, ganhou recall relevante (0.6297), util para deteccao inicial.
+
+
+3) COMPARACAO TRANSVERSAL
+=========================
+
+3.1) Quem melhor deteta doentes (Recall)
+- Random Forest (balanced_subsample): 0.8946
+- Decision Tree 1:5 balanced + threshold: 0.8836
+- Naive Bayes reduzido: 0.6297
+- K-NN melhor variante (1:2): 0.5540
+
+3.2) Trade-off principal observado
+- Quanto maior o recall para classe positiva, menor tende a ser precision e accuracy global.
+- Isto e esperado em problemas medicos de risco quando se privilegia reduzir falsos negativos.
+
+3.3) Robustez por familia de modelo
+- Random Forest mostrou o melhor equilibrio para objetivo clinico de triagem (maior recall e F2).
+- Decision Tree melhorada chegou perto, mas com menor estabilidade teorica que Random Forest.
+- Naive Bayes teve desempenho consistente e simples de manter.
+- K-NN variou bastante com o dataset e K, mostrando maior sensibilidade.
+
+
+4) ANALISE DE APTIDAO PARA CONTEXTO MEDICO
+==========================================
+
+Nota importante:
+- Este projeto nao substitui diagnostico medico nem validacao clinica formal.
+- Os resultados sao de suporte analitico e devem ser interpretados com cautela.
+
+4.1) Criterio medico relevante
+- Para triagem de doenca cardiaca, recall alto e geralmente prioritario,
+  pois perder um doente (falso negativo) pode ser mais grave do que sinalizar
+  um nao doente (falso positivo).
+
+4.2) Aptidao dos modelos
+- Decision Tree 85% e Decision Tree 1:5 (sem ajuste de threshold):
+  aptidao limitada para triagem medica devido a recall insuficiente.
+
+- Decision Tree 1:5 balanced + threshold:
+  apto para triagem inicial (recall alto), mas com muitos falsos positivos.
+  Recomendado como camada de rastreio, nao como decisor final isolado.
+
+- Random Forest balanced_subsample:
+  melhor opcao entre os modelos testados para triagem medica,
+  por atingir o maior recall observado e bom F2.
+
+- Naive Bayes (reduzido):
+  opcao simples e eficiente para baseline operacional, com recall moderado-alto.
+
+- K-NN:
+  apto como comparador e apoio exploratorio, mas menos robusto para este problema
+  quando comparado com Random Forest e Decision Tree balanceada.
+
+
+5) CONCLUSAO FINAL
+==================
+
+Com base nos outputs analisados, o modelo mais indicado para o objetivo de detectar
+casos de Heart_Disease em cenario desbalanceado e:
+
+1) Random Forest com class_weight='balanced_subsample' e threshold otimizado.
+
+Justificacao:
+- Maior recall (0.8946)
+- Melhor F2 entre os cenarios reportados
+- Maior robustez por ser ensemble de multiplas arvores
+
+Opcao secundaria forte:
+2) Decision Tree 1:5 balanceada com threshold otimizado (recall 0.8836),
+   com vantagem de interpretabilidade e desvantagem de menor robustez.
+
+Recomendacao pratica de uso:
+- Usar o modelo para triagem/rastreio (priorizando recall), seguido de
+  etapa clinica confirmatoria para reduzir impacto de falsos positivos.
+
+
+6) LIMITACOES E PROXIMOS PASSOS (RELEVANTE PARA ANALISE INTENSIVA)
+===================================================================
+
+Limitacoes:
+- Validacao baseada em um split de teste fixo (15%).
+- Nao ha calibracao probabilistica clinica formal.
+- Nao ha avaliacao de subgrupos (idade, sexo, comorbidades) nesta comparacao consolidada.
+
+Proximos passos recomendados:
+- Repetir com validacao cruzada estratificada no pipeline final de cada modelo.
+- Medir sensibilidade/especificidade por subgrupos clinicos.
+- Ajustar threshold com base num custo clinico explicito (FN >> FP).
+- Adicionar calibracao de probabilidades (Platt/Isotonic) para suporte a decisao.
