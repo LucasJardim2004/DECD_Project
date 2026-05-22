@@ -1,34 +1,138 @@
-ANALISE DE CLUSTERING HIERARQUICO (WARD) - DADOS Z-SCORE
+====================================================================================================
+COMPREHENSIVE HIERARCHICAL CLUSTERING ANALYSIS REPORT (WARD METHOD)
+====================================================================================================
 
-Ficheiro de entrada: /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_preparacao/CVD_numeric_zscore.csv
-N linhas totais (sem NA): 308854
-N linhas usadas na analise hierarquica: 2500
-N atributos numericos: 18
+1. DATASET INFORMATION
+----------------------------------------------------------------------------------------------------
+   Input file: /Users/lucasjardim/Desktop/Pastas progamação/DECD_Proj/Project_Scripts/Parte1/output_preparacao/CVD_numeric_zscore.csv
+   Total rows (no missing): 308,854
+   Sample size used: 15,000 (4.9%)
+   Number of features: 18
+   Features analyzed: General_Health, Checkup, Exercise, Heart_Disease, Skin_Cancer, Other_Cancer, Depression, Diabetes, Arthritis, Sex
+                      Age_Category, Height_(cm), BMI, Smoking_History, Alcohol_Consumption, Fruit_Consumption, Green_Vegetables_Consumption, FriedPotato_Consumption
 
-RECOMENDACAO DE CORTE DO DENDROGRAMA
-Distancia sugerida para corte: 27.236482
-Maior salto entre fusoes: 8.576630 (indice de fusao 2489)
-N clusters resultante do corte sugerido: 10
+2. DENDROGRAM CUT RECOMMENDATION
+----------------------------------------------------------------------------------------------------
+   Recommended distance threshold: 95.229002
+   Largest jump in distances: 16.732170 (at merge index 14992)
+   Interpretation: The largest gap in merge distances suggests a natural partition
+   Number of clusters from recommended cut: 7
 
-VALIDACAO AUXILIAR (SILHOUETTE PARA k=2..10)
-Melhor k por silhouette: 6
-Melhor silhouette: 0.106429
+3. SILHOUETTE ANALYSIS (k=2..10)
+----------------------------------------------------------------------------------------------------
+   Best k value found: 2
+   Best silhouette score: 0.118047
+   Interpretation: Silhouette ranges from -1 to +1
+     - Values close to 1: Well-separated clusters
+     - Values close to 0: Overlapping clusters
+     - Negative values: Potential mislabeling
+   Current score (0.1180): WEAK clustering structure (overlap between clusters)
 
-METRICAS INTERNAS (PARTICOES ANALISADAS)
-Corte sugerido -> silhouette=0.070445, calinski_harabasz=185.248, davies_bouldin=1.946262
-Best k silhouette -> silhouette=0.106429, calinski_harabasz=207.109, davies_bouldin=1.948179
+4. CLUSTERING METRICS COMPARISON
+----------------------------------------------------------------------------------------------------
+   Partition 1: Dendrogram Cut (n=7 clusters)
+     - Silhouette: 0.087854
+     - Calinski-Harabasz: 1144.815 (higher is better)
+     - Davies-Bouldin: 2.079788 (lower is better)
 
-FICHEIROS GERADOS
-- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/dendrograma_lastp.png
-- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/dendrograma_level.png
-- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/distancias_fusoes_dendrograma.csv
-- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/silhouette_hierarquico_k2_k10.csv
-- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/silhouette_hierarquico_k2_k10.png
-- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/pca_clusters_corte_sugerido.png
-- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/pca_clusters_bestk_silhouette.png
-- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/metricas_internas_clusters.csv
-- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/caracterizacao_clusters_corte_sugerido.csv
-- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/caracterizacao_clusters_bestk_silhouette.csv
-- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/exemplos_representativos_corte_sugerido.csv
-- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/exemplos_representativos_bestk_silhouette.csv
-- /Users/ptome/Documents/GitHub/DECD_Project/Project_Scripts/output_clustering_hierarquico/amostra_clusters_corte_sugerido.csv
+   Partition 2: Best k by Silhouette (k=2 clusters)
+     - Silhouette: 0.118047
+     - Calinski-Harabasz: 1159.034
+     - Davies-Bouldin: 2.273315
+
+   Metric Definitions:
+     - Silhouette: Measures how similar a point is to its cluster vs other clusters
+     - Calinski-Harabasz: Ratio of between-cluster to within-cluster dispersion
+     - Davies-Bouldin: Average similarity between each cluster and its most similar cluster
+
+5. SIGNIFICANT FEATURES (ANOVA ANALYSIS)
+----------------------------------------------------------------------------------------------------
+   For Dendrogram Cut (n=7):
+     - Alcohol_Consumption            | F-stat:    5266.71 | p-value: 0.00e+00
+     - Checkup                        | F-stat:    3237.93 | p-value: 0.00e+00
+     - Green_Vegetables_Consumption   | F-stat:    2415.93 | p-value: 0.00e+00
+     - Fruit_Consumption              | F-stat:    2399.07 | p-value: 0.00e+00
+     - FriedPotato_Consumption        | F-stat:    2160.54 | p-value: 0.00e+00
+     - General_Health                 | F-stat:     922.97 | p-value: 0.00e+00
+     - BMI                            | F-stat:     487.79 | p-value: 0.00e+00
+     - Exercise                       | F-stat:     145.45 | p-value: 5.49e-180
+     - Arthritis                      | F-stat:     142.05 | p-value: 7.96e-176
+     - Diabetes                       | F-stat:     130.16 | p-value: 3.34e-161
+   Total significant features (p<0.05): 18 / 18
+
+   For Best k (k=2):
+     - Alcohol_Consumption            | F-stat:   30389.38 | p-value: 0.00e+00
+     - Sex                            | F-stat:     178.38 | p-value: 1.87e-40
+     - BMI                            | F-stat:     168.34 | p-value: 2.74e-38
+     - Diabetes                       | F-stat:     138.28 | p-value: 8.71e-32
+     - Smoking_History                | F-stat:     122.67 | p-value: 2.12e-28
+     - Height_(cm)                    | F-stat:     113.86 | p-value: 1.74e-26
+     - General_Health                 | F-stat:      99.00 | p-value: 2.99e-23
+     - Exercise                       | F-stat:      69.83 | p-value: 7.04e-17
+     - Skin_Cancer                    | F-stat:      68.77 | p-value: 1.20e-16
+     - Age_Category                   | F-stat:      41.30 | p-value: 1.35e-10
+   Total significant features (p<0.05): 15 / 18
+
+6. CLUSTER SIZE DISTRIBUTION
+----------------------------------------------------------------------------------------------------
+   Dendrogram Cut (n=7):
+     - Cluster  0:   4601 samples ( 30.7%)
+     - Cluster  1:   3705 samples ( 24.7%)
+     - Cluster  2:    557 samples (  3.7%)
+     - Cluster  3:   2079 samples ( 13.9%)
+     - Cluster  4:   2297 samples ( 15.3%)
+     - Cluster  5:    530 samples (  3.5%)
+     - Cluster  6:   1231 samples (  8.2%)
+
+   Best k (k=2):
+     - Cluster  0:  12921 samples ( 86.1%)
+     - Cluster  1:   2079 samples ( 13.9%)
+
+7. GENERATED OUTPUT FILES
+----------------------------------------------------------------------------------------------------
+   Visualizations:
+     - dendrograma_lastp.png: Dendrogram (last p=20 merges)
+     - dendrograma_level.png: Dendrogram (level p=5)
+     - pca_clusters_corte_sugerido.png: PCA projection (suggested cut)
+     - pca_clusters_bestk_silhouette.png: PCA projection (best k)
+     - silhueta_amostras_corte_sugerido.png: Silhouette analysis (suggested cut)
+     - silhueta_amostras_best_k.png: Silhouette analysis (best k)
+     - distribuicao_tamanho_clusters_corte.png: Cluster sizes (suggested cut)
+     - distribuicao_tamanho_clusters_best_k.png: Cluster sizes (best k)
+     - boxplots_features_corte_sugerido.png: Feature boxplots (suggested cut)
+     - boxplots_features_best_k.png: Feature boxplots (best k)
+     - heatmap_features_corte_sugerido.png: Feature heatmap (suggested cut)
+     - heatmap_features_best_k.png: Feature heatmap (best k)
+     - silhouette_hierarquico_k2_k10.png: Silhouette curve (k=2..10)
+
+   Data Files:
+     - caracterizacao_clusters_corte_sugerido.csv: Top features per cluster
+     - caracterizacao_clusters_bestk_silhouette.csv: Top features per cluster
+     - exemplos_representativos_corte_sugerido.csv: Representative samples
+     - exemplos_representativos_bestk_silhouette.csv: Representative samples
+     - estatisticas_detalhadas_corte_sugerido.csv: Detailed stats (mean, std, min, max)
+     - estatisticas_detalhadas_best_k.csv: Detailed stats (mean, std, min, max)
+     - anova_analise_corte_sugerido.csv: ANOVA results for all features
+     - anova_analise_best_k.csv: ANOVA results for all features
+     - metricas_internas_clusters.csv: All clustering metrics
+     - distancias_fusoes_dendrograma.csv: Merge distances and jumps
+     - silhouette_hierarquico_k2_k10.csv: Silhouette scores for k=2..10
+     - amostra_clusters_corte_sugerido.csv: Sample data with cluster labels
+
+8. RECOMMENDATIONS
+----------------------------------------------------------------------------------------------------
+   ! CAUTION: Both partitions show weak separation. Consider:
+     - Feature engineering or preprocessing
+     - Different linkage methods (complete, average)
+     - Alternative clustering algorithms (DBSCAN, K-means)
+     - Analyzing data for natural groupings
+
+   Next Steps:
+     - Review the generated visualizations to understand cluster characteristics
+     - Use detailed statistics (CSV files) for domain-specific interpretation
+     - Compare with other clustering methods (K-means, DBSCAN)
+     - Validate findings using external domain knowledge
+
+====================================================================================================
+Report generated on: 2026-05-18 21:21:46
+====================================================================================================
